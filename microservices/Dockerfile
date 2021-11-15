@@ -1,0 +1,20 @@
+FROM python:3.8
+
+COPY microservices/requirements.txt /
+RUN pip install -r requirements.txt
+
+#RUN python -m grpc_tools.protoc -I ../protobufs --python_out=. \
+#           --grpc_python_out=. ../protobufs/catalog/book.proto
+
+COPY microservices /opt/microservices
+COPY common /opt/microservices/common
+WORKDIR /opt/microservices
+
+RUN python manage.py makemigrations
+RUN python manage.py migrate
+RUN python manage.py collectstatic
+RUN python manage.py test # Run the standard tests. These should all pass. \
+
+EXPOSE 50051
+#CMD [ "python", "manage.py", "runserver", "0.0.0.0:50051" ]
+CMD [ "python", "manage.py", "grpcrunserver", "0.0.0.0:50051", "--dev"]
