@@ -1,3 +1,4 @@
+import werkzeug.exceptions
 from flask import Flask, jsonify
 
 from views.helpers import GRPCException
@@ -16,18 +17,26 @@ def not_found(error):
         "error": "Not found"
     }
     app.logger.error(error)
-    return jsonify(error_message)
+    return jsonify(error_message), 404
 
 
 @app.errorhandler(GRPCException)
-def not_found(error):
+def gprc_exception(error):
     error = {
         "error": error.details
     }
-    return jsonify(error)
+    return jsonify(error), 400
+
+@app.errorhandler(werkzeug.exceptions.HTTPException)
+def handle_exception(error):
+    app.logger.error(error)
+    error = {
+        "error": 'Unexpected error'
+    }
+    return jsonify(error), 400
 
 
+from views import author
+app.register_blueprint(author.bp)
 from views import book
 app.register_blueprint(book.bp)
-from views import test
-app.register_blueprint(test.bp)

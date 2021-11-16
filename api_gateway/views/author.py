@@ -4,16 +4,16 @@ import grpc
 from flask import Blueprint, request, current_app
 from google.protobuf.json_format import MessageToJson
 
-from common.pb2 import book_pb2, book_pb2_grpc
+from common.pb2 import author_pb2_grpc, author_pb2
 from views.helpers import returns_json, GRPCException
 
-bp = Blueprint('book', __name__, url_prefix='/catalog/book')
+bp = Blueprint('author', __name__, url_prefix='/catalog/author')
 
 MICROSERVICES_HOST = os.getenv("MICROSERVICES_HOST", "localhost")
 MICROSERVICES_PORT = os.getenv("MICROSERVICES_PORT", "50051")
 
 GRPC_CHANNEL = grpc.insecure_channel(f"{MICROSERVICES_HOST}:{MICROSERVICES_PORT}")
-GRPC_STUB = book_pb2_grpc.BookControllerStub(GRPC_CHANNEL)
+GRPC_STUB = author_pb2_grpc.AuthorControllerStub(GRPC_CHANNEL)
 
 
 @bp.post('')
@@ -21,13 +21,11 @@ GRPC_STUB = book_pb2_grpc.BookControllerStub(GRPC_CHANNEL)
 def create():
     request_data = request.get_json()
     try:
-        response = GRPC_STUB.Create(book_pb2.Book(
-            title=request_data['title'],
-            isbn=request_data['isbn'],
-            author=request_data['author'],
-            genre=request_data['genre'],
-            summary=request_data['summary'],
-            language=request_data['language']
+        response = GRPC_STUB.Create(author_pb2.Author(
+            first_name=request_data['first_name'],
+            last_name=request_data['last_name'],
+            date_of_birth=request_data['date_of_birth'],
+            date_of_death=request_data['date_of_death'],
         ))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
@@ -36,19 +34,17 @@ def create():
     return MessageToJson(response)
 
 
-@bp.put('/<int:book_id>')
+@bp.put('/<int:author_id>')
 @returns_json
-def update(book_id):
+def update(author_id):
     request_data = request.get_json()
     try:
-        response = GRPC_STUB.Update(book_pb2.Book(
-            id=book_id,
-            title=request_data['title'],
-            isbn=request_data['isbn'],
-            author=request_data['author'],
-            genre=request_data['genre'],
-            summary=request_data['summary'],
-            language=request_data['language']
+        response = GRPC_STUB.Update(author_pb2.Author(
+            id=author_id,
+            first_name=request_data['first_name'],
+            last_name=request_data['last_name'],
+            date_of_birth=request_data['date_of_birth'],
+            date_of_death=request_data['date_of_death'],
         ))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
@@ -57,11 +53,11 @@ def update(book_id):
     return MessageToJson(response)
 
 
-@bp.delete('/<int:book_id>')
-def delete(book_id):
+@bp.delete('/<int:author_id>')
+def delete(author_id):
     try:
-        response = GRPC_STUB.Destroy(book_pb2.Book(
-            id=book_id
+        response = GRPC_STUB.Destroy(author_pb2.Author(
+            id=author_id
         ))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
@@ -70,12 +66,12 @@ def delete(book_id):
     return MessageToJson(response)
 
 
-@bp.get('/<int:book_id>')
+@bp.get('/<int:author_id>')
 @returns_json
-def get(book_id):
+def get(author_id):
     try:
-        response = GRPC_STUB.Retrieve(book_pb2.BookRetrieveRequest(
-            id=book_id
+        response = GRPC_STUB.Retrieve(author_pb2.AuthorRetrieveRequest(
+            id=author_id
         ))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
@@ -87,13 +83,13 @@ def get(book_id):
 @bp.get('')
 @returns_json
 def get_list():
-    books = []
+    authors = []
     try:
-        response = GRPC_STUB.List(book_pb2.BookListRequest())
-        for book in response:
-            books.append(MessageToJson(book))
+        response = GRPC_STUB.List(author_pb2.AuthorListRequest())
+        for author in response:
+            authors.append(MessageToJson(author))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return books
+    return authors

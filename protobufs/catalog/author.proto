@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package catalog;
+
+import "google/protobuf/empty.proto";
+
+service AuthorController {
+    rpc List(AuthorListRequest) returns (stream Author) {}
+    rpc Create(Author) returns (Author) {}
+    rpc Retrieve(AuthorRetrieveRequest) returns (Author) {}
+    rpc Update(Author) returns (Author) {}
+    rpc Destroy(Author) returns (google.protobuf.Empty) {}
+}
+
+message Author {
+    string first_name = 1;
+    string last_name = 2;
+    string date_of_birth = 3;
+    string date_of_death = 4;
+}
+
+message AuthorListRequest {
+}
+
+message AuthorRetrieveRequest {
+    int32 id = 1;
+}
