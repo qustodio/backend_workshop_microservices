@@ -1,4 +1,3 @@
-import werkzeug.exceptions
 from flask import Flask, jsonify
 
 from views.helpers import GRPCException
@@ -27,12 +26,21 @@ def gprc_exception(error):
     }
     return jsonify(error), 400
 
-@app.errorhandler(werkzeug.exceptions.HTTPException)
+
+@app.errorhandler(Exception)
 def handle_exception(error):
     app.logger.error(error)
-    error = {
-        "error": 'Unexpected error'
-    }
+    if app.env == 'development' or app.debug:
+        import traceback
+        tb_info = traceback.format_exc()
+        app.logger.error(tb_info)
+        error = {
+            'error': tb_info
+        }
+    else:
+        error = {
+            "error": 'Unexpected error'
+        }
     return jsonify(error), 400
 
 
