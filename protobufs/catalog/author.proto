@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package catalog;
 
-import "google/protobuf/empty.proto";
-
 service AuthorController {
     rpc List(AuthorListRequest) returns (stream Author) {}
     rpc Create(Author) returns (Author) {}

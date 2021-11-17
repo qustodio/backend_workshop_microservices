@@ -1,9 +1,12 @@
+import logging
+
 import grpc
 from django_grpc_framework.services import Service
 from google.protobuf import empty_pb2
 
-from catalog.models import Book, Author
-from catalog.serializers import BookProtoSerializer, AuthorProtoSerializer
+from catalog.models import Book, Author, BookInstance
+from catalog.serializers import BookProtoSerializer, AuthorProtoSerializer, BookInstanceProtoSerializer, \
+    BookInstanceRenewalProtoSerializer
 
 
 class BookService(Service):
@@ -54,7 +57,7 @@ class AuthorService(Service):
         try:
             return Author.objects.get(pk=pk)
         except Author.DoesNotExist:
-            self.context.abort(grpc.StatusCode.NOT_FOUND, 'Book:%s not found!' % pk)
+            self.context.abort(grpc.StatusCode.NOT_FOUND, 'Author:%s not found!' % pk)
 
     def Update(self, request, context):
         author = self.get_object(request.id)
@@ -78,3 +81,42 @@ class AuthorService(Service):
         serializer = AuthorProtoSerializer(authors, many=True)
         for msg in serializer.message:
             yield msg
+
+
+class BookInstanceService(Service):
+    def Create(self, request, context):
+        serializer = BookInstanceProtoSerializer(message=request)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return serializer.message
+
+    def Renew(self, request, context):
+        book_instance = self.get_object(request.id)
+        serializer = BookInstanceRenewalProtoSerializer(book_instance, message=request)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return serializer.message
+
+    def MyList(self, request, context):
+        book_instance_list = self.get_queryset(request.borrower)
+        serializer = BookInstanceProtoSerializer(book_instance_list, many=True)
+        for msg in serializer.message:
+            yield msg
+
+    def List(self, request, context):
+        book_instance_list = self.get_queryset()
+        serializer = BookInstanceProtoSerializer(book_instance_list, many=True)
+        for msg in serializer.message:
+            yield msg
+
+    def get_object(self, pk):
+        try:
+            return BookInstance.objects.get(pk=pk, status__exact='o')
+        except BookInstance.DoesNotExist:
+            self.context.abort(grpc.StatusCode.NOT_FOUND, 'BookInstance:%s not found!' % pk)
+
+    def get_queryset(self, borrower=None):
+        if borrower:
+            return BookInstance.objects.filter(borrower=borrower).filter(status__exact='o').order_by('due_back')
+        else:
+            return BookInstance.objects.filter(status__exact='o').order_by('due_back')

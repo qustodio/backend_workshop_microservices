@@ -1,19 +1,14 @@
-### How to create all the boilerplate code for a gRPC model 
-1. Connect to the microservices container:
+### How to create all the boilerplate code for a gRPC model
+1. Create the proto model:
 ```bash
-#Get into the container
-docker-compose run microservices bash
+# Needs to be in the container to have access 
+# to the proper tools and paths
+docker-compose run python manage.py generateproto 
+--model catalog.models.Book --fields=id,title,author --file book.proto
 ```
-2.  Create the proto model:
-```bash
-# Create the model
-python manage.py generateproto --model catalog.models.Book 
---fields=id,title,author --file book.proto
-```
-3. Exit the container
-4. Copy&Paste the model proto in protobufs/catalog.
-5. Change the package name in book.proto (line 3) to catalog.
-6. Create the gRPC model code:
+2. Copy&Paste the generated proto-model (from previous step) into _protobufs/catalog/book.proto_
+3. Change the package name in book.proto (line 3) to catalog.
+4. Create the gRPC model code:
 ```bash
 python -m grpc_tools.protoc --proto_path=protobufs 
 --python_out=common/pb2 --grpc_python_out=common/pb2 ./protobufs/catalog/book.proto

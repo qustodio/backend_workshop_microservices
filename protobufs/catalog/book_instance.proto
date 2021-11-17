@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package catalog;
+
+service BookInstanceController {
+    rpc List(BookInstanceListRequest) returns (stream BookInstance) {}
+    rpc Create(BookInstance) returns (BookInstance) {}
+    rpc MyList(MyBookInstanceListRequest) returns (stream BookInstance) {}
+    rpc Renew(BookInstanceRenewal) returns (BookInstance) {}
+}
+
+message BookInstance {
+    string id = 1;
+    int32 book = 2;
+    string imprint = 3;
+    string due_back = 4;
+    int32 borrower = 5;
+    string status = 6;
+}
+
+message BookInstanceRenewal {
+    string id = 1;
+    string due_back = 2;
+}
+
+message MyBookInstanceListRequest {
+    int32 borrower = 1;
+}
+
+message BookInstanceListRequest {
+}

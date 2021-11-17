@@ -7,7 +7,7 @@ from google.protobuf.json_format import MessageToJson
 from common.pb2 import author_pb2_grpc, author_pb2
 from views.helpers import returns_json, GRPCException
 
-bp = Blueprint('author', __name__, url_prefix='/catalog/author')
+bp = Blueprint('author', __name__, url_prefix='/catalogs/authors')
 
 MICROSERVICES_HOST = os.getenv("MICROSERVICES_HOST", "localhost")
 MICROSERVICES_PORT = os.getenv("MICROSERVICES_PORT", "50051")

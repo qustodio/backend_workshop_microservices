@@ -20,7 +20,7 @@ def not_found(error):
 
 
 @app.errorhandler(GRPCException)
-def gprc_exception(error):
+def grpc_exception(error):
     error = {
         "error": error.details
     }
@@ -30,7 +30,14 @@ def gprc_exception(error):
 @app.errorhandler(Exception)
 def handle_exception(error):
     app.logger.error(error)
-    if app.env == 'development' or app.debug:
+    if error.code < 500:
+        code = error.code
+        error = {
+            "error": error.description
+        }
+        return jsonify(error), code
+
+    elif app.env == 'development' or app.debug:
         import traceback
         tb_info = traceback.format_exc()
         app.logger.error(tb_info)
@@ -39,7 +46,7 @@ def handle_exception(error):
         }
     else:
         error = {
-            "error": 'Unexpected error'
+            'error': 'Unexpected error'
         }
     return jsonify(error), 400
 
@@ -48,3 +55,5 @@ from views import author
 app.register_blueprint(author.bp)
 from views import book
 app.register_blueprint(book.bp)
+from views import loan
+app.register_blueprint(loan.bp)
