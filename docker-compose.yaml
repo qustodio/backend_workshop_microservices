@@ -3,8 +3,7 @@ services:
 
   api_gateway:
     build:
-      context: .
-      dockerfile: api_gateway/Dockerfile
+      context: api_gateway
     environment:
         MICROSERVICES_HOST: "microservices"
         MICROSERVICES_PORT: 50051
