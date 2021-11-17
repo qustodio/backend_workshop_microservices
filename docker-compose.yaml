@@ -8,7 +8,6 @@ services:
         MICROSERVICES_HOST: "microservices"
         MICROSERVICES_PORT: 50051
         FLASK_ENV: "development"
-    image: api_gateway
     networks:
       - catalog
     ports:
@@ -21,9 +20,10 @@ services:
     build:
       context: .
       dockerfile: catalog/Dockerfile
-    image: catalog
     networks:
       - catalog
+    ports:
+      - "50051:50051"
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/opt/catalog/common
@@ -31,15 +31,23 @@ services:
   catalog-admin:
     build:
       context: .
-      dockerfile: catalog/Dockerfile.admin
-    image: catalog-admin
+      dockerfile: catalog/Dockerfile
+    command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
     networks:
       - catalog
     ports:
-      - "50000:50000"
+      - "50000:50051"
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/opt/catalog/common
+
+  db:
+    image: "postgres:11"
+    restart: always
+    environment:
+      - "POSTGRES_USERNAME=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=qustodio"
 
 networks:
   catalog:
