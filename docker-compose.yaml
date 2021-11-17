@@ -21,26 +21,26 @@ services:
   catalog:
     build:
       context: .
-      dockerfile: microservices/Dockerfile
-    image: microservices
+      dockerfile: catalog/Dockerfile
+    image: catalog
     networks:
       - catalog
     volumes:
-      - ./microservices:/opt/microservices
-      - ./common:/opt/microservices/common
+      - ./catalog:/opt/catalog
+      - ./common:/opt/catalog/common
 
   catalog-admin:
     build:
       context: .
-      dockerfile: microservices/Dockerfile.admin
+      dockerfile: catalog/Dockerfile.admin
     image: catalog-admin
     networks:
       - catalog
     ports:
       - "50000:50000"
     volumes:
-      - ./microservices:/opt/microservices
-      - ./common:/opt/microservices/common
+      - ./catalog:/opt/catalog
+      - ./common:/opt/catalog/common
 
 networks:
   catalog:

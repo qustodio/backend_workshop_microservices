@@ -1,11 +1,11 @@
 FROM python:3.8
 
-COPY microservices/requirements.txt /
+COPY catalog/requirements.txt /
 RUN pip install -r requirements.txt
 
-COPY microservices /opt/microservices
-COPY common /opt/microservices/common
-WORKDIR /opt/microservices
+COPY catalog /opt/catalog
+COPY common /opt/catalog/common
+WORKDIR /opt/catalog
 
 RUN python manage.py makemigrations
 RUN python manage.py migrate
