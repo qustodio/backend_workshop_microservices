@@ -36,7 +36,7 @@ def create():
 
 @bp.put('/<int:author_id>')
 @returns_json
-def update(author_id):
+def update(author_id: int):
     request_data = request.get_json()
     try:
         response = GRPC_STUB.Update(author_pb2.Author(
@@ -54,7 +54,7 @@ def update(author_id):
 
 
 @bp.delete('/<int:author_id>')
-def delete(author_id):
+def delete(author_id: int):
     try:
         response = GRPC_STUB.Destroy(author_pb2.Author(
             id=author_id
@@ -68,7 +68,7 @@ def delete(author_id):
 
 @bp.get('/<int:author_id>')
 @returns_json
-def get(author_id):
+def get(author_id: int):
     try:
         response = GRPC_STUB.Retrieve(author_pb2.AuthorRetrieveRequest(
             id=author_id

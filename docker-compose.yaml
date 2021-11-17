@@ -11,23 +11,36 @@ services:
         FLASK_ENV: "development"
     image: api_gateway
     networks:
-      - microservices
+      - catalog
     ports:
       - "5000:5000"
     volumes:
       - ./api_gateway:/opt/api_gateway
       - ./common:/opt/api_gateway/common
 
-  microservices:
+  catalog:
     build:
       context: .
       dockerfile: microservices/Dockerfile
     image: microservices
     networks:
-      - microservices
+      - catalog
+    volumes:
+      - ./microservices:/opt/microservices
+      - ./common:/opt/microservices/common
+
+  catalog-admin:
+    build:
+      context: .
+      dockerfile: microservices/Dockerfile.admin
+    image: catalog-admin
+    networks:
+      - catalog
+    ports:
+      - "50000:50000"
     volumes:
       - ./microservices:/opt/microservices
       - ./common:/opt/microservices/common
 
 networks:
-  microservices:
+  catalog:

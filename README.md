@@ -1,3 +1,12 @@
+### Important info
+1. Django superuser (admin):
+```json
+{
+  "username": "qustodio", 
+  "password": "pyday123"
+}
+```
+
 ### How to create all the boilerplate code for a gRPC model
 1. Create the proto model:
 ```bash

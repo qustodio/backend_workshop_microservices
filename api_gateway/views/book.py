@@ -38,7 +38,7 @@ def create():
 
 @bp.put('/<int:book_id>')
 @returns_json
-def update(book_id):
+def update(book_id: int):
     request_data = request.get_json()
     try:
         response = GRPC_STUB.Update(book_pb2.Book(
@@ -58,7 +58,7 @@ def update(book_id):
 
 
 @bp.delete('/<int:book_id>')
-def delete(book_id):
+def delete(book_id: int):
     try:
         response = GRPC_STUB.Destroy(book_pb2.Book(
             id=book_id
@@ -72,7 +72,7 @@ def delete(book_id):
 
 @bp.get('/<int:book_id>')
 @returns_json
-def get(book_id):
+def get(book_id: int):
     try:
         response = GRPC_STUB.Retrieve(book_pb2.BookRetrieveRequest(
             id=book_id

@@ -1,4 +1,5 @@
 import os
+from uuid import UUID
 
 import grpc
 from flask import Blueprint, request, current_app
@@ -37,11 +38,11 @@ def create():
 
 @bp.put('/<uuid:loan_uuid>/renew')
 @returns_json
-def update(loan_uuid):
+def update(loan_uuid: UUID):
     request_data = request.get_json()
     try:
         response = GRPC_STUB.Renew(book_instance_pb2.BookInstanceRenewal(
-            id=str(loan_uuid),
+            id=loan_uuid.hex,
             due_back=request_data['due_back'],
         ))
     except grpc.RpcError as rpc_error:
