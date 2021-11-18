@@ -18,8 +18,6 @@ clean:
 	docker-compose stop
 	docker-compose rm
 
-
-
 migrations:
 	@echo "Building migrations..."
 	docker-compose exec -T catalog python manage.py makemigrations

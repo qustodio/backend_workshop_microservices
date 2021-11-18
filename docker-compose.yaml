@@ -4,6 +4,7 @@ services:
   api_gateway:
     build:
       context: api_gateway
+    restart: always
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
@@ -20,6 +21,7 @@ services:
     build:
       context: .
       dockerfile: catalog/Dockerfile
+    restart: always
     env_file:
       - compose.env
     networks:
@@ -35,6 +37,7 @@ services:
       context: .
       dockerfile: catalog/Dockerfile
     command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
+    restart: always
     env_file:
       - compose.env
     networks:

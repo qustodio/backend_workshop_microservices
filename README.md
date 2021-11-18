@@ -32,3 +32,16 @@ book_pb2_grpc.add_BookControllerServicer_to_server(
 )
 ```
 
+
+### Create DB service (docker compose local)
+- Create DB service
+    - Use the desired docker image for the DB
+    - Include service to the network
+    - Use environment variables to config container (should be in the image's documentation):
+        - Username
+        - Password
+        - Db name
+- Change django settings to use the container as the database
+    - Use credentials set on the container
+    - Use the db service as the database hostname
+
