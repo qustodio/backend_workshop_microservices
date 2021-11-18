@@ -4,11 +4,11 @@ services:
   api_gateway:
     build:
       context: api_gateway
+    restart: always
     environment:
-        MICROSERVICES_HOST: "microservices"
-        MICROSERVICES_PORT: 50051
+        CATALOG_HOST: "catalog"
+        CATALOG_PORT: 50051
         FLASK_ENV: "development"
-    image: api_gateway
     networks:
       - catalog
     ports:
@@ -21,9 +21,13 @@ services:
     build:
       context: .
       dockerfile: catalog/Dockerfile
-    image: catalog
+    restart: always
+    env_file:
+      - compose.env
     networks:
       - catalog
+    ports:
+      - "50051:50051"
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/opt/catalog/common
@@ -31,15 +35,26 @@ services:
   catalog-admin:
     build:
       context: .
-      dockerfile: catalog/Dockerfile.admin
-    image: catalog-admin
+      dockerfile: catalog/Dockerfile
+    command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
+    restart: always
+    env_file:
+      - compose.env
     networks:
       - catalog
     ports:
-      - "50000:50000"
+      - "50000:50051"
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/opt/catalog/common
+
+  db:
+    image: "postgres:11"
+    restart: always
+    env_file:
+      - compose.env
+    networks:
+      - catalog
 
 networks:
   catalog:

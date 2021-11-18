@@ -12,7 +12,7 @@
 ```bash
 # Needs to be in the container to have access 
 # to the proper tools and paths
-docker-compose run python manage.py generateproto 
+docker-compose run catalog python manage.py generateproto 
 --model catalog.models.Book --fields=id,title,author --file book.proto
 ```
 2. Copy&Paste the generated proto-model (from previous step) into _protobufs/catalog/book.proto_
@@ -22,13 +22,26 @@ docker-compose run python manage.py generateproto
 python -m grpc_tools.protoc --proto_path=protobufs 
 --python_out=common/pb2 --grpc_python_out=common/pb2 ./protobufs/catalog/book.proto
 ```
-7. Create the serializer class BookProtoSerializer (in microservices/catalog/serializers.py)
-8. Create the service class BookService (in microservices/catalog/services.py)
-9. Register the service in the grpc handler (in microservices/catalog/handlers.py)
+7. Create the serializer class BookProtoSerializer (in catalog/catalog/serializers.py)
+8. Create the service class BookService (in catalog/catalog/services.py)
+9. Register the service in the grpc handler (in catalog/catalog/handlers.py)
 ```bash
 book_pb2_grpc.add_BookControllerServicer_to_server(
     BookService.as_servicer(), 
     server
 )
 ```
+
+
+### Create DB service (docker compose local)
+- Create DB service
+    - Use the desired docker image for the DB
+    - Include service to the network
+    - Use environment variables to config container (should be in the image's documentation):
+        - Username
+        - Password
+        - Db name
+- Change django settings to use the container as the database
+    - Use credentials set on the container
+    - Use the db service as the database hostname
 
