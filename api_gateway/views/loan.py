@@ -10,10 +10,10 @@ from views.helpers import returns_json, GRPCException
 
 bp = Blueprint('loan', __name__, url_prefix='/catalogs/loans')
 
-MICROSERVICES_HOST = os.getenv("MICROSERVICES_HOST", "localhost")
-MICROSERVICES_PORT = os.getenv("MICROSERVICES_PORT", "50051")
+CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
+CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")
 
-GRPC_CHANNEL = grpc.insecure_channel(f"{MICROSERVICES_HOST}:{MICROSERVICES_PORT}")
+GRPC_CHANNEL = grpc.insecure_channel(f"{CATALOG_HOST}:{CATALOG_PORT}")
 GRPC_STUB = book_instance_pb2_grpc.BookInstanceControllerStub(GRPC_CHANNEL)
 
 

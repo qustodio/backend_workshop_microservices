@@ -5,8 +5,8 @@ services:
     build:
       context: api_gateway
     environment:
-        MICROSERVICES_HOST: "catalog"
-        MICROSERVICES_PORT: 50051
+        CATALOG_HOST: "catalog"
+        CATALOG_PORT: 50051
         FLASK_ENV: "development"
     networks:
       - catalog
