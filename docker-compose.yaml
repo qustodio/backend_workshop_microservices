@@ -50,6 +50,8 @@ services:
     restart: always
     env_file:
       - compose.env
+    networks:
+      - catalog
 
 networks:
   catalog:
