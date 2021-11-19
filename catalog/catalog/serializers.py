@@ -60,6 +60,13 @@ class BookInstanceProtoSerializer(proto_serializers.ModelProtoSerializer):
             data['borrower'] = None
         return data
 
+class BookInstanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookInstance
+        proto_class = book_instance_pb2.BookInstance
+        fields = ['id', 'book', 'imprint', 'due_back', 'borrower', 'status']
+
+    id = serializers.UUIDField(read_only=True, format='hex')
 
 class BookInstanceRenewalProtoSerializer(proto_serializers.ModelProtoSerializer):
     class Meta:

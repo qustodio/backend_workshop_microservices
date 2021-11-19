@@ -6,8 +6,10 @@ from django.urls import reverse  # To generate URLS by reversing URL patterns
 
 from dj_cqrs.mixins import MasterMixin
 
-class Genre(models.Model):
+class Genre(MasterMixin, models.Model):
     """Model representing a book genre (e.g. Science Fiction, Non Fiction)."""
+    CQRS_ID = 'genre'
+
     name = models.CharField(
         max_length=200,
         help_text="Enter a book genre (e.g. Science Fiction, French Poetry etc.)"
@@ -18,8 +20,10 @@ class Genre(models.Model):
         return self.name
 
 
-class Language(models.Model):
+class Language(MasterMixin, models.Model):
     """Model representing a Language (e.g. English, French, Japanese, etc.)"""
+    CQRS_ID = 'language'
+
     name = models.CharField(max_length=200,
                             help_text="Enter the book's natural language (e.g. English, French, Japanese etc.)")
 
@@ -28,8 +32,10 @@ class Language(models.Model):
         return self.name
 
 
-class Book(models.Model):
+class Book(MasterMixin, models.Model):
     """Model representing a book (but not a specific copy of a book)."""
+    CQRS_ID = 'book'
+
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
     # Foreign Key used because book can only have one author, but authors can have multiple books
@@ -68,8 +74,11 @@ from datetime import date
 from django.contrib.auth.models import User  # Required to assign User as a borrower
 
 
-class BookInstance(models.Model):
+class BookInstance(MasterMixin, models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
+    CQRS_ID = 'book_instance'
+    CQRS_SERIALIZER = 'catalog.serializers.BookInstanceSerializer'
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Unique ID for this particular book across whole library")
     book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
@@ -77,6 +86,10 @@ class BookInstance(models.Model):
     due_back = models.DateField(null=True, blank=True)
     borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
+    @property
+    def pk(self):
+        return super().pk.hex
+    
     @property
     def is_overdue(self):
         if self.due_back and date.today() > self.due_back:
