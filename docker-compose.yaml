@@ -13,7 +13,8 @@ services:
 
   api-gateway:
     build:
-      context: api_gateway
+      context: .
+      dockerfile: api_gateway/Dockerfile
     restart: always
     environment:
         CATALOG_HOST: "catalog"
