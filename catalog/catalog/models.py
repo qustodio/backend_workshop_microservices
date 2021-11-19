@@ -4,6 +4,7 @@ from django.db import models
 
 from django.urls import reverse  # To generate URLS by reversing URL patterns
 
+from dj_cqrs.mixins import MasterMixin
 
 class Genre(models.Model):
     """Model representing a book genre (e.g. Science Fiction, Non Fiction)."""
@@ -105,8 +106,10 @@ class BookInstance(models.Model):
         return '{0} ({1})'.format(self.id, self.book.title)
 
 
-class Author(models.Model):
+class Author(MasterMixin, models.Model):
     """Model representing an author."""
+    CQRS_ID = 'author'
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)

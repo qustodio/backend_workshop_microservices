@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_grpc_framework',
     # Add our new application
     'catalog.apps.CatalogConfig', #This object was created for us in /catalog/apps.py
+    'dj_cqrs',
 ]
 
 MIDDLEWARE = [
@@ -164,3 +165,8 @@ STATIC_URL = '/static/'
 # Static file serving.
 # http://whitenoise.evans.io/en/stable/django.html#django-middleware
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+CQRS = {
+    'transport': 'dj_cqrs.transport.RabbitMQTransport',
+    'url': 'amqp://guest:guest@rabbit:5672/'
+}
