@@ -3,14 +3,14 @@ from django.db import models
 # Create your models here.
 
 from django.urls import reverse  # To generate URLS by reversing URL patterns
-from django.contrib.auth.models import User
+from django.contrib.auth.models import UserManager, AbstractUser
 
 from dj_cqrs.mixins import MasterMixin
 
 
-class LibraryUser(MasterMixin, User):
+class LibraryUser(MasterMixin, AbstractUser):
     CQRS_ID = 'user'
-
+    objects = UserManager()
 
 class Genre(MasterMixin, models.Model):
     """Model representing a book genre (e.g. Science Fiction, Non Fiction)."""
@@ -81,7 +81,7 @@ from datetime import date
 class BookInstance(MasterMixin, models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
     CQRS_ID = 'book_instance'
-    CQRS_SERIALIZER = 'catalog.serializers.BookInstanceSerializer'
+    CQRS_SERIALIZER = 'catalog.serializers.BookInstanceProtoSerializer'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Unique ID for this particular book across whole library")
