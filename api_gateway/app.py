@@ -1,3 +1,5 @@
+import marshmallow.exceptions
+import werkzeug.exceptions
 from flask import Flask, jsonify
 
 from views.helpers import GRPCException
@@ -26,11 +28,19 @@ def grpc_exception(error):
     }
     return jsonify(error), 400
 
+@app.errorhandler(marshmallow.exceptions.ValidationError)
+def validation_error(error):
+    app.logger.error(error.messages)
+    error = {
+        "error": error.messages
+    }
+    return jsonify(error), 400
+
 
 @app.errorhandler(Exception)
 def handle_exception(error):
     app.logger.error(error)
-    if error.code < 500:
+    if isinstance(error, werkzeug.exceptions.HTTPException) and error.code < 500:
         code = error.code
         error = {
             "error": error.description

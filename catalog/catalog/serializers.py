@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 from django_grpc_framework import proto_serializers
 from rest_framework import serializers
@@ -20,14 +21,29 @@ class AuthorProtoSerializer(proto_serializers.ModelProtoSerializer):
         proto_class = author_pb2.Author
         fields = ['id', 'first_name', 'last_name', 'date_of_birth', 'date_of_death']
 
+    def message_to_data(self, message):
+        logging.warning(message)
+        data = {
+            'first_name': message.first_name,
+            'last_name': message.last_name,
+            'date_of_birth': message.date_of_birth,
+        }
+
+        if message.id and not message.date_of_death:
+            data['date_of_death'] = None
+        elif message.date_of_death:
+            data['date_of_death'] = message.date_of_death
+
+        return data
+
 
 class BookInstanceProtoSerializer(proto_serializers.ModelProtoSerializer):
+    id = serializers.UUIDField(read_only=True)
+
     class Meta:
         model = BookInstance
         proto_class = book_instance_pb2.BookInstance
         fields = ['id', 'book', 'imprint', 'due_back', 'borrower', 'status']
-
-    id = serializers.UUIDField(read_only=True)
 
 
 class BookInstanceRenewalProtoSerializer(proto_serializers.ModelProtoSerializer):
@@ -53,4 +69,3 @@ class BookInstanceRenewalProtoSerializer(proto_serializers.ModelProtoSerializer)
             raise proto_serializers.ValidationError('Invalid date - renewal more than 4 weeks ahead')
 
         return data
-
