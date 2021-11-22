@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'recomendations.apps.RecomendationsConfig', #This object was created for us in /recomendations/apps.py
+    'dj_cqrs',
 ]
 
 MIDDLEWARE = [
@@ -94,6 +96,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'recomendations.LibraryUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -132,3 +135,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CQRS = {
+    'transport': 'dj_cqrs.transport.RabbitMQTransport',
+    'url': 'amqp://guest:guest@rabbit:5672/',
+    'queue': 'recomendator_replica',
+}
