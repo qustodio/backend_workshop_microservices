@@ -9,7 +9,6 @@ from rest_framework import serializers
 from catalog.models import Book, Author, BookInstance
 from common.pb2 import book_pb2, author_pb2, book_instance_pb2
 
-
 class BookProtoSerializer(proto_serializers.ModelProtoSerializer):
     summary = serializers.CharField(allow_blank=True)
 
