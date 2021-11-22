@@ -13,7 +13,8 @@ services:
 
   api-gateway:
     build:
-      context: api_gateway
+      context: .
+      dockerfile: api_gateway/Dockerfile
     restart: always
     environment:
         CATALOG_HOST: "catalog"
@@ -37,6 +38,8 @@ services:
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/opt/catalog/common
+    depends_on:
+      - db
 
   catalog-admin:
     build:
@@ -51,6 +54,8 @@ services:
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/opt/catalog/common
+    depends_on:
+      - db
 
   db:
     image: "postgres:11"
