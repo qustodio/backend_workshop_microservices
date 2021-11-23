@@ -1,7 +1,9 @@
 import datetime
-import logging
 
 from django_grpc_framework import proto_serializers
+from django_grpc_framework.protobuf.json_format import (
+    message_to_dict
+)
 from rest_framework import serializers
 
 from catalog.models import Book, Author, BookInstance
@@ -45,6 +47,18 @@ class BookInstanceProtoSerializer(proto_serializers.ModelProtoSerializer):
         model = BookInstance
         proto_class = book_instance_pb2.BookInstance
         fields = ['id', 'book', 'imprint', 'due_back', 'borrower', 'status']
+
+    def message_to_data(self, message):
+        data = message_to_dict(message)
+        if message.due_back:
+            data['due_back'] = message.due_back
+        else:
+            data['due_back'] = None
+        if message.borrower:
+            data['borrower'] = message.borrower
+        else:
+            data['borrower'] = None
+        return data
 
 
 class BookInstanceRenewalProtoSerializer(proto_serializers.ModelProtoSerializer):

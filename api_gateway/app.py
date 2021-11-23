@@ -28,6 +28,7 @@ def grpc_exception(error):
     }
     return jsonify(error), 400
 
+
 @app.errorhandler(marshmallow.exceptions.ValidationError)
 def validation_error(error):
     app.logger.error(error.messages)
