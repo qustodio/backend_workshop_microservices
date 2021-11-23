@@ -2,15 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
 
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
-imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
@@ -22,20 +14,6 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
-
-podAnnotations: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
 
 ingress:
   enabled: false
@@ -50,30 +28,42 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
 ### Catalog ###
 catalog:
+  replicaCount: 1
+
+  image:
+    repository: catalog
+    pullPolicy: Never
+    tag: "latest"
+
+  imagePullSecrets: []
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  podAnnotations: {}
+
+  resources: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
   service:
     type: ClusterIP
-    port: 80
+    port: 50051
+
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -84,21 +74,40 @@ catalog:
 ### Admin ###
 admin:
   enabled: true
-  service:
-    type: ClusterIP
-    port: 80
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
 
-### Gateway ###
-gateway:
+  replicaCount: 1
+
+  image:
+    repository: catalog
+    pullPolicy: Never
+    tag: "latest"
+
+  imagePullSecrets: []
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  podAnnotations: {}
+
+  resources: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
   service:
     type: ClusterIP
-    port: 80
+    port: 50051
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -107,7 +116,7 @@ gateway:
     # targetMemoryUtilizationPercentage: 80
 
 ### Postgres ###
-postgres:
+postgresql:
   enabled: true
   image:
     repository: bitnami/postgresql
