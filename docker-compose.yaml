@@ -57,7 +57,48 @@ services:
     depends_on:
       - db
 
+  recomendator:
+    build:
+      context: .
+      dockerfile: recomendator/Dockerfile
+    restart: always
+    env_file:
+      - compose.env
+    networks:
+      - catalog
+    volumes:
+      - ./recomendator:/opt/recomendator
+      - ./common:/opt/recomendator/common
+    depends_on:
+      - recomendator_db
+    ports:
+      - "81:8000"
+
+  recomendator-admin:
+    build:
+      context: .
+      dockerfile: recomendator/Dockerfile
+    command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
+    restart: always
+    env_file:
+      - compose.env
+    networks:
+      - catalog
+    volumes:
+      - ./recomendator:/opt/recomendator
+      - ./common:/opt/recomendator/common
+    depends_on:
+      - recomendator_db
+
   db:
+    image: "postgres:11"
+    restart: always
+    env_file:
+      - compose.env
+    networks:
+      - catalog
+    
+  recomendator_db:
     image: "postgres:11"
     restart: always
     env_file:
