@@ -1,5 +1,8 @@
 import datetime
-from marshmallow import Schema, fields, ValidationError
+
+from marshmallow import Schema, fields, ValidationError, validate
+
+isbn_regex_validator = r'^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$'
 
 
 class CustomDateField(fields.Date):
@@ -23,3 +26,13 @@ class AuthorSchema(Schema):
     last_name = fields.Str(required=True)
     date_of_birth = CustomDateField(required=True, format='%Y-%m-%d')
     date_of_death = CustomDateField(format='%Y-%m-%d')
+
+
+class BookSchema(Schema):
+    id = fields.Int(required=True, dump_only=True)
+    title = fields.Str(required=True)
+    isbn = fields.Str(required=True, validate=validate.Regexp(isbn_regex_validator))
+    summary = fields.Str()
+    author = fields.Int(required=True)
+    language = fields.Int(required=True)
+    genre = fields.List(fields.Int, required=True)

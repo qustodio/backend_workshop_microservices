@@ -25,7 +25,6 @@ def create():
     request_data = request.get_json()
     data = author_schema.load(request_data)
     try:
-        current_app.logger.warning("DATE OF BIRTH %s", data.get('date_of_birth'))
         response = GRPC_STUB.Create(author_pb2.Author(
             first_name=data.get('first_name'),
             last_name=data.get('last_name'),
