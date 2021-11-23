@@ -4,6 +4,7 @@ import grpc
 
 from common.pb2 import recomendations_pb2 as recomendations__pb2
 
+
 class RecomendationsControllerStub(object):
     """Missing associated documentation comment in .proto file."""
 

@@ -17,4 +17,5 @@ message Book {
 }
 
 message RecomendationsRequest {
+    int32 id = 1;
 }

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x14recomendations.proto\x12\x0crecomendator\"q\n\x04\x42ook\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0c\n\x04isbn\x18\x03 \x01(\t\x12\x0e\n\x06\x61uthor\x18\x04 \x01(\x05\x12\r\n\x05genre\x18\x05 \x03(\x05\x12\x0f\n\x07summary\x18\x06 \x01(\t\x12\x10\n\x08language\x18\x07 \x01(\x05\"\x17\n\x15RecomendationsRequest2_\n\x18RecomendationsController\x12\x43\n\x04List\x12#.recomendator.RecomendationsRequest\x1a\x12.recomendator.Book\"\x00\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\x14recomendations.proto\x12\x0crecomendator\"q\n\x04\x42ook\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0c\n\x04isbn\x18\x03 \x01(\t\x12\x0e\n\x06\x61uthor\x18\x04 \x01(\x05\x12\r\n\x05genre\x18\x05 \x03(\x05\x12\x0f\n\x07summary\x18\x06 \x01(\t\x12\x10\n\x08language\x18\x07 \x01(\x05\"#\n\x15RecomendationsRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x32_\n\x18RecomendationsController\x12\x43\n\x04List\x12#.recomendator.RecomendationsRequest\x1a\x12.recomendator.Book\"\x00\x30\x01\x62\x06proto3'
 )
 
 
@@ -107,6 +107,13 @@ _RECOMENDATIONSREQUEST = _descriptor.Descriptor(
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='recomendator.RecomendationsRequest.id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -120,7 +127,7 @@ _RECOMENDATIONSREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=153,
-  serialized_end=176,
+  serialized_end=188,
 )
 
 DESCRIPTOR.message_types_by_name['Book'] = _BOOK
@@ -150,8 +157,8 @@ _RECOMENDATIONSCONTROLLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=178,
-  serialized_end=273,
+  serialized_start=190,
+  serialized_end=285,
   methods=[
   _descriptor.MethodDescriptor(
     name='List',
