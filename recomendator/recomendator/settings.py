@@ -135,3 +135,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CATALOG_GRPC_HOST = os.getenv("CATALOG_HOST", "localhost")
+CATALOG_GRPC_PORT = os.getenv("CATALOG_PORT", "50051")
