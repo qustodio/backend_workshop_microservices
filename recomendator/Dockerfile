@@ -7,6 +7,6 @@ COPY recomendator /opt/recomendator
 COPY common /opt/recomendator/common
 WORKDIR /opt/recomendator
 
-EXPOSE 8000
-CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+EXPOSE 50051
+CMD [ "python", "manage.py", "grpcrunserver", "0.0.0.0:50051", "--dev" ]
 

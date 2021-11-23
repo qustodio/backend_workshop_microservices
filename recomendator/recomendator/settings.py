@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_grpc_framework',
     'recomendations.apps.RecomendationsConfig', #This object was created for us in /recomendations/apps.py
 ]
 

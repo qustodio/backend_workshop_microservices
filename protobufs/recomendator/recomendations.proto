@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package recomendator;
+
+service RecomendationsController {
+    rpc List(RecomendationsRequest) returns (stream Book) {}
+}
+
+message Book {
+    int32 id = 1;
+    string title = 2;
+    string isbn = 3;
+    int32 author = 4;
+    repeated int32 genre = 5;
+    string summary = 6;
+    int32 language = 7;
+}
+
+message RecomendationsRequest {
+}
