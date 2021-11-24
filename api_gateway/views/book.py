@@ -1,5 +1,4 @@
 import os
-import json
 
 import grpc
 from flask import Blueprint, request, current_app
@@ -97,4 +96,4 @@ def get_list():
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return json.dumps(books)
+    return books
