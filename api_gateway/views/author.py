@@ -91,5 +91,4 @@ def get_list():
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
-
     return authors_schema.dumps(response)

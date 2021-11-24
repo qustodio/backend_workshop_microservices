@@ -68,3 +68,5 @@ from views import book
 app.register_blueprint(book.bp)
 from views import loan
 app.register_blueprint(loan.bp)
+from views import recomendation
+app.register_blueprint(recomendation.bp)

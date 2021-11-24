@@ -26,6 +26,8 @@ services:
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
+        RECOMENDATOR_HOST: "recomendator"
+        RECOMENDATOR_PORT: 50051
         FLASK_ENV: "development"
     networks:
       - catalog
@@ -109,6 +111,14 @@ services:
       - catalog
 
   db:
+    image: "postgres:11"
+    restart: always
+    env_file:
+      - compose.env
+    networks:
+      - catalog
+    
+  recomendator_db:
     image: "postgres:11"
     restart: always
     env_file:
