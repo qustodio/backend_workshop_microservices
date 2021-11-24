@@ -1,10 +1,9 @@
 FROM python:3.8
 
-COPY api_gateway/requirements.txt /
+COPY requirements.txt /
 RUN pip install -r requirements.txt
 
-COPY api_gateway /opt/api_gateway
-COPY common /opt/api_gateway/common
+COPY . /opt/api_gateway
 
 WORKDIR /opt/api_gateway
 EXPOSE 5000
