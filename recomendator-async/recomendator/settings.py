@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'm-4)d!z&xjw)sr16jviv%fn^f(c^iyl@fi)w08!=q-*^isyc%v'
 
-DATABASE_HOST = os.environ.get('POSTGRES_RECOMENDATOR_HOST', '')
+DATABASE_HOST = os.environ.get('POSTGRES_RECOMENDATOR_ASYNC_HOST', '')
 DATABASE_USERNAME = os.environ.get('POSTGRES_USERNAME', '')
 DATABASE_PASSWORD = os.environ.get('POSTGRES_PASSWORD', '')
 DATABASE_PORT = os.environ.get('POSTGRES_PORT', '')
@@ -139,5 +139,5 @@ STATIC_URL = '/static/'
 CQRS = {
     'transport': 'dj_cqrs.transport.RabbitMQTransport',
     'url': 'amqp://guest:guest@rabbit:5672/',
-    'queue': 'recomendator_replica',
+    'queue': 'recomendator_async_replica',
 }
