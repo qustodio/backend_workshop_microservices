@@ -19,10 +19,8 @@ spec:
             {{- toYaml .Values.catalog.securityContext | nindent 12 }}
           image: "{{ .Values.catalog.image.repository }}:{{ .Values.catalog.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.catalog.image.pullPolicy }}
-          command:
-            - "python"
-            - "manage.py"
-            - "migrate"
+          command: ["/bin/sh","-c"]
+          args: ["python manage.py migrate && python manage.py loaddata fixtures/*.json"]
           envFrom:
             - configMapRef:
                 name: {{ include "catalog.fullname" . }}-configs
