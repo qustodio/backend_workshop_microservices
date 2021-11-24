@@ -13,24 +13,36 @@ https://minikube.sigs.k8s.io/docs/start/
 `minikube addons enable ingress`
 
 
+# Run dashboard
+
+`minikube dashboard`
+
+
 # Install helm
 
 https://helm.sh/docs/intro/install/
 
 
 # Install helm dependencies
+
 ```
-cd helm
-helm dependencies update
+helm dependencies update ./chart
 ```
 
 
 # Install helm chart
-Replace `{{ release-name }}` and `{{ release-namespace }}` with the actual values you wish to use
+
+Replace `RELEASE-NAME` and `RELESE-NAMESPACE` with the actual values you wish to use
 ```
+# We need to run the following command to ensure we build our images with minikube's docker agent.
+# If we don't, even if you build your images, minikube won't be able to access them.
 eval $(minikube docker-env)
+
+# Build our image
 docker build -t catalog:latest .
-helm install {{ release-name }} . --values values.yaml -n {{ release-namespace }} --create-namespace
+
+# Deploy our chart on minikube
+helm install RELEASE-NAME . --values values.yaml -n RELEASE-NAMESPACE --create-namespace
 ```
 
 # Access the application
