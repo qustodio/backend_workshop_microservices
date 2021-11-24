@@ -1,38 +1,28 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: {{ include "catalog.fullname" . }}
-  labels:
-    {{- include "catalog.labels" . | nindent 4 }}
+  name: {{ include "catalog.fullname" . }}-migrations
 spec:
-  {{- if not .Values.catalog.autoscaling.enabled }}
-  replicas: {{ .Values.catalog.replicaCount }}
-  {{- end }}
-  selector:
-    matchLabels:
-      {{- include "catalog.selectorLabels" . | nindent 6 }}
   template:
-    metadata:
-      {{- with .Values.catalog.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      labels:
-        {{- include "catalog.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.catalog.imagePullSecrets }}
+      restartPolicy: "OnFailure"
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "catalog.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.catalog.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.catalog.securityContext | nindent 12 }}
           image: "{{ .Values.catalog.image.repository }}:{{ .Values.catalog.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.catalog.image.pullPolicy }}
+          command:
+            - "python"
+            - "manage.py"
+            - "migrate"
           envFrom:
             - configMapRef:
                 name: {{ include "catalog.fullname" . }}-configs
@@ -42,12 +32,6 @@ spec:
             - name: http
               containerPort: {{ .Values.catalog.port }}
               protocol: TCP
-          livenessProbe:
-            tcpSocket:
-              port: http
-          readinessProbe:
-            tcpSocket:
-              port: http
           resources:
             {{- toYaml .Values.catalog.resources | nindent 12 }}
       {{- with .Values.catalog.nodeSelector }}
@@ -62,3 +46,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+

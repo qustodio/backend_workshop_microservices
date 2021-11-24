@@ -8,7 +8,7 @@ spec:
   type: {{ .Values.catalog.service.type }}
   ports:
     - port: {{ .Values.catalog.service.port }}
-      targetPort: http
+      targetPort: {{ .Values.catalog.port }}
       protocol: TCP
       name: http
   selector:

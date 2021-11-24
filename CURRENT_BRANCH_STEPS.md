@@ -2,6 +2,10 @@
 
 https://minikube.sigs.k8s.io/docs/start/
 
+# Install plugins
+
+minikube addons enable ingress
+
 
 # Install helm
 

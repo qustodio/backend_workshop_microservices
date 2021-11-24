@@ -33,9 +33,14 @@ spec:
             {{- toYaml .Values.admin.securityContext | nindent 12 }}
           image: "{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.admin.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "catalog.fullname" . }}-configs
+            - secretRef:
+                name: {{ include "catalog.fullname" . }}-secrets
           ports:
             - name: http
-              containerPort: 50051
+              containerPort: {{ .Values.admin.port }}
               protocol: TCP
           livenessProbe:
             tcpSocket:
