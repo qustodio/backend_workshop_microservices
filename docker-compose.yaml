@@ -64,6 +64,19 @@ services:
     depends_on:
       - db
 
+  recomendator:
+    build:
+      context: recomendator
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - compose.env
+    networks:
+      - catalog
+    volumes:
+      - ./recomendator-async:/opt/recomendator
+      - ./common:/opt/recomendator/common
+
   recomendator-async:
     build:
       context: recomendator-async
@@ -79,6 +92,13 @@ services:
       - ./recomendator-async:/opt/recomendator
       - ./common:/opt/recomendator/common
 
+  recomendator-db:
+    image: "postgres:11"
+    restart: always
+    env_file:
+      - compose.env
+    networks:
+      - catalog
 
   recomendator-async-db:
     image: "postgres:11"
