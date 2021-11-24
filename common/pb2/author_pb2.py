@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='catalog',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x14\x63\x61talog/author.proto\x12\x07\x63\x61talog\x1a\x1bgoogle/protobuf/empty.proto\"]\n\x06\x41uthor\x12\x12\n\nfirst_name\x18\x01 \x01(\t\x12\x11\n\tlast_name\x18\x02 \x01(\t\x12\x15\n\rdate_of_birth\x18\x03 \x01(\t\x12\x15\n\rdate_of_death\x18\x04 \x01(\t\"\x13\n\x11\x41uthorListRequest\"#\n\x15\x41uthorRetrieveRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x32\x9c\x02\n\x10\x41uthorController\x12\x37\n\x04List\x12\x1a.catalog.AuthorListRequest\x1a\x0f.catalog.Author\"\x00\x30\x01\x12,\n\x06\x43reate\x12\x0f.catalog.Author\x1a\x0f.catalog.Author\"\x00\x12=\n\x08Retrieve\x12\x1e.catalog.AuthorRetrieveRequest\x1a\x0f.catalog.Author\"\x00\x12,\n\x06Update\x12\x0f.catalog.Author\x1a\x0f.catalog.Author\"\x00\x12\x34\n\x07\x44\x65stroy\x12\x0f.catalog.Author\x1a\x16.google.protobuf.Empty\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x14\x63\x61talog/author.proto\x12\x07\x63\x61talog\x1a\x1bgoogle/protobuf/empty.proto\"i\n\x06\x41uthor\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x12\n\nfirst_name\x18\x02 \x01(\t\x12\x11\n\tlast_name\x18\x03 \x01(\t\x12\x15\n\rdate_of_birth\x18\x04 \x01(\t\x12\x15\n\rdate_of_death\x18\x05 \x01(\t\"\x13\n\x11\x41uthorListRequest\"#\n\x15\x41uthorRetrieveRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x32\x9c\x02\n\x10\x41uthorController\x12\x37\n\x04List\x12\x1a.catalog.AuthorListRequest\x1a\x0f.catalog.Author\"\x00\x30\x01\x12,\n\x06\x43reate\x12\x0f.catalog.Author\x1a\x0f.catalog.Author\"\x00\x12=\n\x08Retrieve\x12\x1e.catalog.AuthorRetrieveRequest\x1a\x0f.catalog.Author\"\x00\x12,\n\x06Update\x12\x0f.catalog.Author\x1a\x0f.catalog.Author\"\x00\x12\x34\n\x07\x44\x65stroy\x12\x0f.catalog.Author\x1a\x16.google.protobuf.Empty\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 
@@ -34,29 +34,36 @@ _AUTHOR = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='first_name', full_name='catalog.Author.first_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='id', full_name='catalog.Author.id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='last_name', full_name='catalog.Author.last_name', index=1,
+      name='first_name', full_name='catalog.Author.first_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='date_of_birth', full_name='catalog.Author.date_of_birth', index=2,
+      name='last_name', full_name='catalog.Author.last_name', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='date_of_death', full_name='catalog.Author.date_of_death', index=3,
+      name='date_of_birth', full_name='catalog.Author.date_of_birth', index=3,
       number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='date_of_death', full_name='catalog.Author.date_of_death', index=4,
+      number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -74,7 +81,7 @@ _AUTHOR = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=62,
-  serialized_end=155,
+  serialized_end=167,
 )
 
 
@@ -97,8 +104,8 @@ _AUTHORLISTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=157,
-  serialized_end=176,
+  serialized_start=169,
+  serialized_end=188,
 )
 
 
@@ -128,8 +135,8 @@ _AUTHORRETRIEVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=178,
-  serialized_end=213,
+  serialized_start=190,
+  serialized_end=225,
 )
 
 DESCRIPTOR.message_types_by_name['Author'] = _AUTHOR
@@ -166,8 +173,8 @@ _AUTHORCONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=216,
-  serialized_end=500,
+  serialized_start=228,
+  serialized_end=512,
   methods=[
   _descriptor.MethodDescriptor(
     name='List',

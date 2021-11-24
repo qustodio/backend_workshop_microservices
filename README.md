@@ -17,7 +17,7 @@ docker-compose run catalog python manage.py generateproto
 ```
 2. Copy&Paste the generated proto-model (from previous step) into _protobufs/catalog/book.proto_
 3. Change the package name in book.proto (line 3) to catalog.
-4. Create the gRPC model code:
+4. Create the gRPC model code (pb2):
 ```bash
 python -m grpc_tools.protoc --proto_path=protobufs 
 --python_out=common/pb2 --grpc_python_out=common/pb2 ./protobufs/catalog/book.proto
