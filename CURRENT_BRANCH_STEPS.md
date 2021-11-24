@@ -42,7 +42,7 @@ eval $(minikube docker-env)
 docker build -t catalog:latest .
 
 # Deploy our chart on minikube
-helm install RELEASE-NAME . --values values.yaml -n RELEASE-NAMESPACE --create-namespace
+helm install RELEASE-NAME ./chart --values ./chart/values.yaml -n RELEASE-NAMESPACE --create-namespace
 ```
 
 # Access the application
@@ -50,8 +50,8 @@ helm install RELEASE-NAME . --values values.yaml -n RELEASE-NAMESPACE --create-n
 Get minikube's IP:
 `minikube ip`
 
-Add the following line to your `/etc/hosts` file (being {{ MINIKUBE_IP }} the IP obtained with the previous command):
-`{{ MINIKUBE_IP }} qbooks.com`
+Add the following line to your `/etc/hosts` file (being MINIKUBE_IP the IP obtained with the previous command):
+`MINIKUBE_IP qbooks.com`
 
 You can now access your application's ingress withyour browser by just accessing `qbooks.com`
 
