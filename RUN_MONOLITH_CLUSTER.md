@@ -5,7 +5,12 @@ https://minikube.sigs.k8s.io/docs/start/
 
 # Run Minikube
 
-`minikube start`
+```
+minikube start
+
+# Needed to use istio's ingress
+minikube tunnel
+```
 
 
 # Install plugins
@@ -25,8 +30,6 @@ https://helm.sh/docs/intro/install/
 
 # Install istio
 
-https://istio.io/latest/docs/setup/install/helm/
-
 ```
 helm repo add istio https://istio-release.storage.googleapis.com/charts
 helm repo update
@@ -35,6 +38,10 @@ kubectl create namespace istio-system
 helm install istio-base istio/base -n istio-system
 
 helm install istiod istio/istiod -n istio-system --wait
+
+kubectl create namespace istio-ingress
+kubectl label namespace istio-ingress istio-injection=enabled
+helm install istio-ingress istio/gateway -n istio-ingress --wait
 ```
 
 
@@ -65,16 +72,36 @@ eval $(minikube docker-env)
 docker build -t catalog:latest .
 
 # Deploy our chart on minikube on the qbook namespace
-helm install RELEASE-NAME ./chart --values ./chart/values.yaml -n qbook --create-namespace
+helm install RELEASE-NAME ./chart --values ./chart/values.yaml -n qbooks
 ```
 
 # Access the application
 
+## Kubernetes ingress
 Get minikube's IP:
-`minikube ip`
+```
+minikube ip
+```
 
 Add the following line to your `/etc/hosts` file (being MINIKUBE_IP the IP obtained with the previous command):
-`MINIKUBE_IP qbooks.com`
+```
+MINIKUBE_IP qbooks.com
+```
+
+You can now access your application's ingress withyour browser by just accessing `qbooks.com`
+
+
+## Istio ingress gateway
+
+Get the ingress' external IP:
+```
+kubectl get svc istio-ingress -n istio-ingress
+```
+
+Add the following line to your `/etc/hosts` file (being ISTIO_INGRESS_EXTERNAL_IP the IP obtained with the previous command):
+```
+ISTIO_INGRESS_EXTERNAL_IP qbooks.com
+```
 
 You can now access your application's ingress withyour browser by just accessing `qbooks.com`
 

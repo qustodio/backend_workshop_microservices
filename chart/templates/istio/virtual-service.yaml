@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "catalog.fullname" . }}
+spec:
+  hosts:
+  - "qbooks.com"
+  http:
+  - match:
+    - uri:
+        prefix: "/"
+    route:
+    - destination:
+        host: {{ include "catalog.fullname" . }}
+        port:
+          number: 50051
+  - match:
+    - uri:
+        prefix: "/admin"
+    route:
+    - destination:
+        host: {{ include "catalog.fullname" . }}-admin
+        port:
+          number: 50051
+  gateways:
+  - {{ include "catalog.fullname" . }}-gateway
