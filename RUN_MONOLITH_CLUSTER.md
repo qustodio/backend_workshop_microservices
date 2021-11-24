@@ -23,6 +23,29 @@ https://minikube.sigs.k8s.io/docs/start/
 https://helm.sh/docs/intro/install/
 
 
+# Install istio
+
+https://istio.io/latest/docs/setup/install/helm/
+
+```
+helm repo add istio https://istio-release.storage.googleapis.com/charts
+helm repo update
+
+kubectl create namespace istio-system
+helm install istio-base istio/base -n istio-system
+
+helm install istiod istio/istiod -n istio-system --wait
+```
+
+
+# Set up namespace for our app
+
+```
+kubectl create namespace qbooks
+kubectl label namespace qbooks istio-injection=enabled
+```
+
+
 # Install helm dependencies
 
 ```
@@ -32,7 +55,7 @@ helm dependencies update ./chart
 
 # Install helm chart
 
-Replace `RELEASE-NAME` and `RELESE-NAMESPACE` with the actual values you wish to use
+Replace `RELEASE-NAME` with the actual values you wish to use
 ```
 # We need to run the following command to ensure we build our images with minikube's docker agent.
 # If we don't, even if you build your images, minikube won't be able to access them.
@@ -41,8 +64,8 @@ eval $(minikube docker-env)
 # Build our image
 docker build -t catalog:latest .
 
-# Deploy our chart on minikube
-helm install RELEASE-NAME ./chart --values ./chart/values.yaml -n RELEASE-NAMESPACE --create-namespace
+# Deploy our chart on minikube on the qbook namespace
+helm install RELEASE-NAME ./chart --values ./chart/values.yaml -n qbook --create-namespace
 ```
 
 # Access the application
