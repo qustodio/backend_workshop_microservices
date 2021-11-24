@@ -11,7 +11,7 @@ from common.pb2 import (
     book_instance_pb2
 )
 
-from recomendations.models import Book
+from recomendations.models import Book, UserRecomendation
 from recomendations.serializers import BookRecomendationProtoSerializer
 
 class RecomendationService(Service):
@@ -43,6 +43,12 @@ class RecomendationService(Service):
             recomended_genres=recomended_genres,
             all_books=books
         )
+        book_instances = self.save_recomended_books(recomended_books=books)
+        UserRecomendation.objects.create(
+            user=user_id,
+        ).books.set(book_instances)
+
+
         serializer = BookRecomendationProtoSerializer(books, many=True)
         for msg in serializer.message:
             yield msg
@@ -115,3 +121,11 @@ class RecomendationService(Service):
                     continue
 
         return recomended_books if len(recomended_books) > 0 else random_recomended_books
+
+    def save_recomended_books(self, recomended_books):
+        return [
+            Book.objects.get_or_create(pk=book.id)[0]
+            for book in recomended_books
+        ]
+
+        
