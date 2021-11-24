@@ -54,7 +54,6 @@ class RecomendationService(Service):
                 id__in=read_books.values('book__id')
             )[:2]
         
-        self.save_recomendations(recomended_books=recomendations, user=user)
         return recomendations
 
     def save_recomendations(self, recomended_books, user):
