@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package catalog;
 
+
 service BookInstanceController {
     rpc List(BookInstanceListRequest) returns (stream BookInstance) {}
     rpc Create(BookInstance) returns (BookInstance) {}

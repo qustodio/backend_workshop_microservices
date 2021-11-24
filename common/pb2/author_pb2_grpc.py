@@ -50,8 +50,8 @@ class AuthorControllerServicer(object):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method no11t implemented!')
-    raise NotImplementedError('Met11hod not implemented!')
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
   def Create(self, request, context):
     # missing associated documentation comment in .proto file

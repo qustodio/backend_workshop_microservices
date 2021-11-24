@@ -1,5 +1,3 @@
-import logging
-
 import grpc
 from django_grpc_framework.services import Service
 from google.protobuf import empty_pb2
@@ -113,7 +111,7 @@ class BookInstanceService(Service):
         try:
             return BookInstance.objects.get(pk=pk, status__exact='o')
         except BookInstance.DoesNotExist:
-            self.context.abort(grpc.StatusCode.NOT_FOUND, 'BookInstance:%s not found!' % pk)
+            self.context.abort(grpc.StatusCode.NOT_FOUND, 'BookInstance:%s not found!' % id)
 
     def get_queryset(self, borrower=None):
         if borrower:
