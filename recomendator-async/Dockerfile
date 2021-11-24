@@ -4,7 +4,6 @@ COPY ./requirements.txt /
 RUN pip install -r requirements.txt
 
 COPY . /opt/recomendator
-COPY common /opt/recomendator/common
 WORKDIR /opt/recomendator
 
 EXPOSE 80

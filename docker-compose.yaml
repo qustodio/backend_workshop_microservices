@@ -75,8 +75,11 @@ services:
       - compose.env
     networks:
       - catalog
+    environment:
+      CATALOG_HOST: "catalog"
+      CATALOG_PORT: 50051
     volumes:
-      - ./recomendator-async:/opt/recomendator
+      - ./recomendator:/opt/recomendator
       - ./common:/opt/recomendator/common
 
   recomendator-async:
