@@ -5,6 +5,7 @@ from flask import Blueprint, request, current_app
 from google.protobuf.json_format import MessageToJson
 
 from common.pb2 import book_pb2, book_pb2_grpc
+from serializers import BookSchema
 from views.helpers import returns_json, GRPCException
 
 bp = Blueprint('book', __name__, url_prefix='/catalogs/books')
@@ -15,46 +16,49 @@ CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")
 GRPC_CHANNEL = grpc.insecure_channel(f"{CATALOG_HOST}:{CATALOG_PORT}")
 GRPC_STUB = book_pb2_grpc.BookControllerStub(GRPC_CHANNEL)
 
+book_schema = BookSchema()
+books_schema = BookSchema(many=True)
+
 
 @bp.post('')
-@returns_json
 def create():
     request_data = request.get_json()
+    data = book_schema.load(request_data)
     try:
         response = GRPC_STUB.Create(book_pb2.Book(
-            title=request_data['title'],
-            isbn=request_data['isbn'],
-            author=request_data['author'],
-            genre=request_data['genre'],
-            summary=request_data['summary'],
-            language=request_data['language']
+            title=data.get('title'),
+            isbn=data.get('isbn'),
+            author=data.get('author'),
+            genre=data.get('genre'),
+            summary=data.get('summary'),
+            language=data.get('language')
         ))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return MessageToJson(response)
+    return book_schema.dump(response)
 
 
 @bp.put('/<int:book_id>')
-@returns_json
 def update(book_id: int):
     request_data = request.get_json()
+    data = book_schema.load(request_data)
     try:
         response = GRPC_STUB.Update(book_pb2.Book(
             id=book_id,
-            title=request_data['title'],
-            isbn=request_data['isbn'],
-            author=request_data['author'],
-            genre=request_data['genre'],
-            summary=request_data['summary'],
-            language=request_data['language']
+            title=data.get('title'),
+            isbn=data.get('isbn'),
+            author=data.get('author'),
+            genre=data.get('genre'),
+            summary=data.get('summary'),
+            language=data.get('language')
         ))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return MessageToJson(response)
+    return book_schema.dump(response)
 
 
 @bp.delete('/<int:book_id>')
@@ -71,7 +75,6 @@ def delete(book_id: int):
 
 
 @bp.get('/<int:book_id>')
-@returns_json
 def get(book_id: int):
     try:
         response = GRPC_STUB.Retrieve(book_pb2.BookRetrieveRequest(
@@ -81,19 +84,15 @@ def get(book_id: int):
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return MessageToJson(response)
+    return book_schema.dump(response)
 
 
 @bp.get('')
 @returns_json
 def get_list():
-    books = []
     try:
         response = GRPC_STUB.List(book_pb2.BookListRequest())
-        for book in response:
-            books.append(MessageToJson(book))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
-
-    return books
+    return books_schema.dumps(response)
