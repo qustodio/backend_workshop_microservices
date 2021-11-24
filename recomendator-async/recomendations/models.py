@@ -86,12 +86,14 @@ class BookInstance(ReplicaMixin, models.Model):
     @classmethod
     def cqrs_create(cls, sync, mapped_data, previous_data=None):
         mapped_data['book'] = Book.objects.get(id=mapped_data['book'])
-        mapped_data['borrower'] = LibraryUser.objects.get(id=mapped_data['borrower'])
+        if mapped_data['borrower']:
+            mapped_data['borrower'] = LibraryUser.objects.get(id=mapped_data['borrower'])
         super().cqrs_create(sync, mapped_data, previous_data)
         
     def cqrs_update(self, sync, mapped_data, previous_data=None):
         mapped_data['book'] = Book.objects.get(id=mapped_data['book'])
-        mapped_data['borrower'] = LibraryUser.objects.get(id=mapped_data['borrower'])
+        if mapped_data['borrower']:
+            mapped_data['borrower'] = LibraryUser.objects.get(id=mapped_data['borrower'])
         super().cqrs_update(sync, mapped_data, previous_data)
 
     status = models.CharField(

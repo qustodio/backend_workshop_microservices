@@ -38,18 +38,8 @@ class RecomendationService(Service):
         self,
         user
     ):
-        books = Book.objects.all()
-        retrieved_books = BookInstance.objects.filter(borrower=user).prefetch_related('author', 'gendre')
-        authors_retrieved = Author.objects.filter(
-            id__in=retrieved_books.values('author__id')
-        )
-        return books.filter(
-            genre__in=genres_retrieved
-        ).union(
-            books.filter(
-                author__in=authors_retrieved
-            )
-        ).distinct()
+        genres = BookInstance.objects.all()
+        return books
 
     def save_recomendations(self, recomended_books, user):
        UserRecomendation.objects.create(
