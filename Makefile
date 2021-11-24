@@ -22,11 +22,14 @@ migrations:
 	@echo "Building migrations..."
 	docker-compose exec -T catalog python manage.py makemigrations
 	docker-compose exec -T recomendator python manage.py makemigrations
+	docker-compose exec -T recomendator-async python manage.py makemigrations
 
-migrate: 
+migrate:
 	@echo "Running migrations..."
 	docker-compose exec -T catalog python manage.py migrate
 	docker-compose exec -T recomendator python manage.py migrate
+	docker-compose exec -T recomendator-async python manage.py migrate
+
 
 fixtures:
 	@echo "Loading fixtures..."

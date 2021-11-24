@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'recomendations.apps.RecomendationsConfig', #This object was created for us in /recomendations/apps.py
+    'django_grpc_framework',
     'dj_cqrs',
+    'recomendations.apps.RecomendationsConfig', #This object was created for us in /recomendations/apps.py
 ]
 
 MIDDLEWARE = [

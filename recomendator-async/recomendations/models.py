@@ -51,14 +51,23 @@ class Book(ReplicaMixin, models.Model):
         """String for representing the Model object."""
         return self.title
 
+    @classmethod
+    def cqrs_create(cls, sync, mapped_data, previous_data=None):
+        mapped_data['author'] = Author.objects.get(id=mapped_data['author'])
+        super().cqrs_create(sync, mapped_data, previous_data)
+
+    def cqrs_update(self, sync, mapped_data, previous_data=None):
+        mapped_data['author'] = Author.objects.get(id=mapped_data['author'])
+        super().cqrs_update(sync, mapped_data, previous_data)
+
 class BookInstance(ReplicaMixin, models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
     CQRS_ID = 'book_instance'
-    CQRS_SERIALIZER = 'recomendator.serializers.BookInstanceSerializer'
+    CQRS_SERIALIZER = 'recomendat.serializers.BookInstanceSerializer'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Unique ID for this particular book across whole library")
-    book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
+    book = models.ForeignKey(Book, on_delete=models.RESTRICT, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
     borrower = models.ForeignKey(LibraryUser, on_delete=models.SET_NULL, null=True, blank=True)
@@ -73,6 +82,17 @@ class BookInstance(ReplicaMixin, models.Model):
         ('a', 'Available'),
         ('r', 'Reserved'),
     )
+
+    @classmethod
+    def cqrs_create(cls, sync, mapped_data, previous_data=None):
+        mapped_data['book'] = Book.objects.get(id=mapped_data['book'])
+        mapped_data['borrower'] = LibraryUser.objects.get(id=mapped_data['borrower'])
+        super().cqrs_create(sync, mapped_data, previous_data)
+        
+    def cqrs_update(self, sync, mapped_data, previous_data=None):
+        mapped_data['book'] = Book.objects.get(id=mapped_data['book'])
+        mapped_data['borrower'] = LibraryUser.objects.get(id=mapped_data['borrower'])
+        super().cqrs_update(sync, mapped_data, previous_data)
 
     status = models.CharField(
         max_length=1,
@@ -98,3 +118,7 @@ class Author(ReplicaMixin, models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return '{0}, {1}'.format(self.last_name, self.first_name)
+
+class UserRecomendation(models.Model):
+    user = models.ForeignKey(LibraryUser, on_delete=models.CASCADE, null=False)
+    books = models.ManyToManyField(Book)

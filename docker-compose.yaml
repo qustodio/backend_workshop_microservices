@@ -28,6 +28,8 @@ services:
         CATALOG_PORT: 50051
         RECOMENDATOR_HOST: "recomendator"
         RECOMENDATOR_PORT: 50051
+        RECOMENDATOR_ASYNC_HOST: "recomendator-async"
+        RECOMENDATOR_ASYNC_PORT: 50051
         FLASK_ENV: "development"
     networks:
       - catalog
@@ -91,8 +93,6 @@ services:
       - compose.env
     networks:
       - catalog
-    ports:
-      - "160:80"
     volumes:
       - ./recomendator-async:/opt/recomendator
       - ./common:/opt/recomendator/common
