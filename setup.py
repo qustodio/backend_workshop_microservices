@@ -24,7 +24,7 @@ setup(
     packages=find_packages(include=['common', 'common.*']),
     include_package_data=False,
     install_requires=[
-        "grpcio-tools==1.27.1"
+        "grpcio-tools==1.30"
     ],
     setup_requires=['flake8']
 )
