@@ -33,6 +33,8 @@ spec:
             {{- toYaml .Values.admin.securityContext | nindent 12 }}
           image: "{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.admin.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args: ["python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:{{ .Values.admin.port}}"]
           envFrom:
             - configMapRef:
                 name: {{ include "catalog.fullname" . }}-configs

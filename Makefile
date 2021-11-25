@@ -25,7 +25,7 @@ migrate:
 
 collectstatic:
 	@echo "Collecting static files..."
-	docker-compose exec -T catalog python manage.py collectstatic
+	docker-compose exec -T catalog python manage.py collectstatic --no-input
 
 fixtures:
 	@echo "Loading fixtures..."
