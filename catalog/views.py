@@ -2,10 +2,10 @@ import random
 
 from django.http.response import Http404, HttpResponseNotFound
 from django.shortcuts import render
-
+from django.db.models import Q
 # Create your views here.
 
-from .models import Book, Author, BookInstance, Genre
+from .models import Book, Author, BookInstance, User
 
 
 def index(request):
@@ -40,40 +40,31 @@ class BookListView(generic.ListView):
     paginate_by = 10
 
 
-from catalog.models import User
-import logging
 class BookRecomendationsView(generic.ListView):
+    template_name = 'catalog/book_recomendations.html'
+
     def get_queryset(self):
         return Book.objects.all()
 
     def filter_queryset(self, queryset, user_pk):
         user = User.objects.get(pk=user_pk)
-        genres_retrieved = BookInstance.objects.filter(
-            borrower=user
-        ).prefetch_related('book__genre').values_list('book__genre', flat=True)
-        authors_retrieved = BookInstance.objects.filter(
-            borrower=user,
-        ).prefetch_related('book__author').values_list('book__author', flat=True)
+        books_read = Book.objects.filter(
+            id__in=BookInstance.objects.filter(
+                borrower=user
+            ).values('book')
+        ).prefetch_related('genre', 'author')
 
-        return queryset.filter(
-            genre__in=genres_retrieved
-        ).union(
-            queryset.filter(
-                author__in=authors_retrieved
-            )
+        recomendations = queryset.filter(
+            Q(author__in=books_read.values('author'))
+            | 
+            Q(genre__in=books_read.values('genre'))
         ).distinct()
 
+        import logging; logging.warning(len(recomendations))
+        return recomendations
+
     def random_recomendations(self, length=2):
-        queryset = self.get_queryset()
-        random_pks = (
-            random.sample(
-                list(queryset.values_list('pk', flat=True)),
-                length
-            )
-        )
-        return queryset.filter(
-            pk__in=random_pks
-        )
+        return self.get_queryset()[:length]
 
     def get(self, request, user_pk):
         self.object_list = self.get_queryset()
