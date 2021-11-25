@@ -18,6 +18,11 @@ minikube tunnel
 ```
 
 
+# Install plugins
+
+`minikube addons enable ingress`
+
+
 # Run dashboard (optional)
 
 `minikube dashboard`
