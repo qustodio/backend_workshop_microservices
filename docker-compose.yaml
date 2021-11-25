@@ -58,8 +58,8 @@ services:
 
   recomendator:
     build:
-      context: .
-      dockerfile: recomendator/Dockerfile
+      context: recomendator/
+      dockerfile: Dockerfile
     restart: always
     env_file:
       - compose.env
