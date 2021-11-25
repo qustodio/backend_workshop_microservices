@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.db.models import Q
 # Create your views here.
 
-from .models import Book, Author, BookInstance, User
+from .models import Book, Author, BookInstance, User, UserRecomendations
 
 
 def index(request):
@@ -60,7 +60,6 @@ class BookRecomendationsView(generic.ListView):
             Q(genre__in=books_read.values('genre'))
         ).distinct()
 
-        import logging; logging.warning(len(recomendations))
         return recomendations
 
     def random_recomendations(self, length=2):
@@ -75,6 +74,11 @@ class BookRecomendationsView(generic.ListView):
         
         if len(self.object_list) == 0:
             self.object_list = self.random_recomendations()
+
+        UserRecomendations.objects.create(
+            user = User.objects.get(pk=user_pk)
+        ).books.set(self.object_list)
+
         context = self.get_context_data()
         return self.render_to_response(context)
 
