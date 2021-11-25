@@ -6,6 +6,9 @@
   "password": "pyday123"
 }
 ```
+2. Repo with the common grpc code (pb2):
+   1. [Link](https://pypi.org/project/qservices-library)
+   2. Package installation: `pip install qservices-library`
 
 ### How to create all the boilerplate code for a gRPC model
 1. Create the proto model:
