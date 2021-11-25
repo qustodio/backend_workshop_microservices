@@ -1,26 +1,23 @@
 from django_grpc_framework.services import Service
 
 from recomendations.models import (
-    Author,
     BookInstance,
     Book,
-    LibraryUser,
     UserRecomendation
 )
-from recomendations.serializers import BookProtoSerializer
+from recomendations.serializers import BookRecomendationProtoSerializer
 
 class RecomendationService(Service):
     def List(self, request, context):
         user_id = request.id
 
-        user = LibraryUser.objects.get(id=user_id)
-        recomendations = self.calculate_recomendations(user=user)
+        recomendations = self.calculate_recomendations(user=user_id)
         self.save_recomendations(
             recomended_books=recomendations,
-            user=user
+            user=user_id
         )
 
-        serializer = BookProtoSerializer(recomendations, many=True)
+        serializer = BookRecomendationProtoSerializer(recomendations, many=True)
         for msg in serializer.message:
             yield msg
 
@@ -31,8 +28,7 @@ class RecomendationService(Service):
         return Book.objects.filter(pk=book_id)
 
     def get_book_instances_from_user(self, user_id):
-        user = LibraryUser.objects.get(pk=user_id)
-        return BookInstance.objects.filter(borrower=user)
+        return BookInstance.objects.filter(borrower=user_id)
 
     def calculate_recomendations(
         self,

@@ -14,6 +14,13 @@ class BookProtoSerializer(proto_serializers.ModelProtoSerializer):
         fields = ['id', 'title', 'isbn', 'summary', 'author', 'genre', 'language']
 
 
+class BookRecomendationProtoSerializer(proto_serializers.ModelProtoSerializer):
+    class Meta:
+        model = Book
+        proto_class = book_pb2.Book
+        fields = ['id']
+
+
 class BookInstanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookInstance
