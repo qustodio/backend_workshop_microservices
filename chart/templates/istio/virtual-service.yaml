@@ -8,6 +8,8 @@ spec:
   http:
   - match:
     - uri:
+        prefix: "/static/admin"
+    - uri:
         prefix: "/admin"
     route:
     - destination:
