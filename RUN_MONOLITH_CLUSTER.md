@@ -2,6 +2,9 @@
 
 https://minikube.sigs.k8s.io/docs/start/
 
+# Install Kubectl
+
+`snap install --classic kubectl`
 
 # Run Minikube
 
