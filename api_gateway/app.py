@@ -1,15 +1,15 @@
 import marshmallow.exceptions
 import werkzeug.exceptions
-from flask import Flask, jsonify
+from flask import jsonify
+from apiflask import APIFlask
 
 from views.helpers import GRPCException
 
-app = Flask(__name__)
+app = APIFlask(__name__, docs_path='/docs/swagger-ui')
 
 
-@app.route("/")
 def index():
-    return "Hello world!"
+    return "Hello from Qustodio API Gateway!"
 
 
 @app.errorhandler(404)
