@@ -1,10 +1,9 @@
 FROM python:3.8
 
-COPY recomendator/requirements.txt /
+COPY requirements.txt /
 RUN pip install -r requirements.txt
 
-COPY recomendator /opt/recomendator
-COPY common /opt/recomendator/common
+COPY . /opt/recomendator
 WORKDIR /opt/recomendator
 
 EXPOSE 50051

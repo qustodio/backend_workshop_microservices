@@ -66,6 +66,10 @@ from views import author
 app.register_blueprint(author.bp)
 from views import book
 app.register_blueprint(book.bp)
+from views import genre
+app.register_blueprint(genre.bp)
+from views import language
+app.register_blueprint(language.bp)
 from views import loan
 app.register_blueprint(loan.bp)
 from views import recomendation

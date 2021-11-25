@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package catalog;
+
+service LanguageController {
+    rpc List(LanguageListRequest) returns (stream Language) {}
+}
+
+message Language {
+    int32 id = 1;
+    string name = 2;
+}
+
+message LanguageListRequest {
+}
