@@ -664,7 +664,8 @@ grafana:
     ##
     # hosts:
     #   - grafana.domain.com
-    hosts: []
+    hosts:
+      - grafana.qbooks.com
 
     ## Path for grafana ingress
     path: /
