@@ -1,8 +1,8 @@
 import os
 
 import grpc
-from apiflask import APIBlueprint, input, output, doc
-from flask import Blueprint, current_app
+from apiflask import APIBlueprint, output, doc
+from flask import current_app
 
 from common.pb2 import recomendations_pb2, recomendations_pb2_grpc
 from serializers import RecomendationSchema

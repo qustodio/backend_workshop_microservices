@@ -1,13 +1,14 @@
 import os
 
 import grpc
-from flask import Blueprint, current_app
+from apiflask import APIBlueprint, output, doc
+from flask import current_app
 
 from common.pb2 import language_pb2_grpc, language_pb2
 from serializers import LanguageSchema
 from views.helpers import GRPCException, returns_json
 
-bp = Blueprint('language', __name__, url_prefix='/catalogs/languages')
+bp = APIBlueprint('language', __name__, url_prefix='/catalogs/languages')
 
 CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
 CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")
@@ -19,6 +20,8 @@ languages_schema = LanguageSchema(many=True)
 
 
 @bp.get('')
+@doc("Get languages list")
+@output(LanguageSchema(many=True))
 @returns_json
 def get_list():
     try:
