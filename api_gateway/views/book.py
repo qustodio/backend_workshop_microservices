@@ -1,14 +1,15 @@
 import os
 
 import grpc
-from flask import Blueprint, request, current_app
+from apiflask import APIBlueprint, input, output, doc
+from flask import current_app
 from google.protobuf.json_format import MessageToJson
 
 from common.pb2 import book_pb2, book_pb2_grpc
 from serializers import BookSchema
 from views.helpers import returns_json, GRPCException
 
-bp = Blueprint('book', __name__, url_prefix='/catalogs/books')
+bp = APIBlueprint('book', __name__, url_prefix='/catalogs/books')
 
 CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
 CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")
@@ -21,9 +22,10 @@ books_schema = BookSchema(many=True)
 
 
 @bp.post('')
-def create():
-    request_data = request.get_json()
-    data = book_schema.load(request_data)
+@doc("Create a book")
+@input(BookSchema)
+@output(BookSchema)
+def create(data: dict):
     try:
         response = GRPC_STUB.Create(book_pb2.Book(
             title=data.get('title'),
@@ -37,13 +39,14 @@ def create():
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return book_schema.dump(response)
+    return response
 
 
 @bp.put('/<int:book_id>')
-def update(book_id: int):
-    request_data = request.get_json()
-    data = book_schema.load(request_data)
+@doc("Update a book")
+@input(BookSchema)
+@output(BookSchema)
+def update(book_id: int, data: dict):
     try:
         response = GRPC_STUB.Update(book_pb2.Book(
             id=book_id,
@@ -58,10 +61,11 @@ def update(book_id: int):
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return book_schema.dump(response)
+    return response
 
 
 @bp.delete('/<int:book_id>')
+@doc("Delete a book")
 def delete(book_id: int):
     try:
         response = GRPC_STUB.Destroy(book_pb2.Book(
@@ -75,6 +79,8 @@ def delete(book_id: int):
 
 
 @bp.get('/<int:book_id>')
+@doc("Get a book")
+@output(BookSchema)
 def get(book_id: int):
     try:
         response = GRPC_STUB.Retrieve(book_pb2.BookRetrieveRequest(
@@ -84,10 +90,12 @@ def get(book_id: int):
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return book_schema.dump(response)
+    return response
 
 
 @bp.get('')
+@doc("Get books list")
+@output(BookSchema(many=True))
 @returns_json
 def get_list():
     try:
