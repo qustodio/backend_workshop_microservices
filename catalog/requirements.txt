@@ -8,3 +8,4 @@ psycopg2-binary==2.8.6
 qservices-library==1.1
 wheel==0.35.1
 whitenoise==5.2.0
+qservices-library
