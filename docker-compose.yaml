@@ -20,9 +20,13 @@ services:
         CATALOG_PORT: 50051
         RECOMENDATOR_HOST: "recomendator"
         RECOMENDATOR_PORT: 50051
+        ACCOUNTS_HOST: "accounts"
+        ACCOUNTS_PORT: 50051
         FLASK_ENV: "development"
     networks:
       - catalog
+    ports:
+      - "8080:5000"
     volumes:
       - ./api_gateway:/opt/api_gateway
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -55,6 +59,16 @@ services:
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
       - db
+
+  accounts:
+    build:
+      context: accounts
+    restart: always
+    networks:
+      - catalog
+    volumes:
+      - ./accounts:/opt/accounts
+      - ./common:/usr/local/lib/python3.8/site-packages/common
 
   recomendator:
     build:

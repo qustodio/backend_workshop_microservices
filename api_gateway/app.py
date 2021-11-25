@@ -2,6 +2,7 @@ import marshmallow.exceptions
 import werkzeug.exceptions
 from flask import jsonify
 from apiflask import APIFlask
+from flask_jwt import JWT, jwt_required, current_identity
 
 from views.helpers import GRPCException
 
@@ -70,3 +71,5 @@ from views import loan
 app.register_blueprint(loan.bp)
 from views import recomendation
 app.register_blueprint(recomendation.bp)
+from views import account
+app.register_blueprint(account.bp)
