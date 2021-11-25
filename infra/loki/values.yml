@@ -1,0 +1,25 @@
+loki:
+  enabled: true
+
+promtail:
+  enabled: true
+
+fluent-bit:
+  enabled: false
+
+grafana:
+  enabled: false
+  sidecar:
+    datasources:
+      enabled: true
+  image:
+    tag: 8.1.6
+
+prometheus:
+  enabled: false
+
+filebeat:
+  enabled: false
+
+logstash:
+  enabled: false
