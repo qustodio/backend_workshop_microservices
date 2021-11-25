@@ -1,10 +1,9 @@
 FROM python:3.8
 
-COPY catalog/requirements.txt /
+COPY requirements.txt /
 RUN pip install -r requirements.txt
 
-COPY catalog /opt/catalog
-COPY common /opt/catalog/common
+COPY . /opt/catalog
 WORKDIR /opt/catalog
 
 EXPOSE 50051

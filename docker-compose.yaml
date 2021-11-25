@@ -20,8 +20,7 @@ services:
 
   api-gateway:
     build:
-      context: .
-      dockerfile: api_gateway/Dockerfile
+      context: ./api_gateway/
     restart: always
     environment:
         CATALOG_HOST: "catalog"
@@ -35,12 +34,11 @@ services:
       - catalog
     volumes:
       - ./api_gateway:/opt/api_gateway
-      - ./common:/opt/api_gateway/common
+      - ./common:/usr/local/lib/python3.8/site-packages/common
 
   catalog:
     build:
-      context: .
-      dockerfile: catalog/Dockerfile
+      context: ./catalog/
     restart: always
     env_file:
       - compose.env
@@ -48,14 +46,13 @@ services:
       - catalog
     volumes:
       - ./catalog:/opt/catalog
-      - ./common:/opt/catalog/common
+      - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
       - db
 
   catalog-admin:
     build:
-      context: .
-      dockerfile: catalog/Dockerfile
+      context: ./catalog/
     command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
     restart: always
     env_file:
@@ -64,13 +61,13 @@ services:
       - catalog
     volumes:
       - ./catalog:/opt/catalog
-      - ./common:/opt/catalog/common
+      - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
       - db
 
   recomendator:
     build:
-      context: recomendator
+      context: recomendator/
       dockerfile: Dockerfile
     restart: always
     env_file:
@@ -82,7 +79,9 @@ services:
       CATALOG_PORT: 50051
     volumes:
       - ./recomendator:/opt/recomendator
-      - ./common:/opt/recomendator/common
+      - ./common:/usr/local/lib/python3.8/site-packages/common
+    depends_on:
+      - recomendator_db
 
   recomendator-async:
     build:

@@ -2,14 +2,14 @@ import os
 from uuid import UUID
 
 import grpc
-from flask import Blueprint, request, current_app
-from google.protobuf.json_format import MessageToJson
+from apiflask import APIBlueprint, input, output, doc
+from flask import current_app
 
 from common.pb2 import book_instance_pb2, book_instance_pb2_grpc
 from serializers import LoanSchema, RenewLoanSchema
 from views.helpers import GRPCException, returns_json
 
-bp = Blueprint('loan', __name__, url_prefix='/catalogs/loans')
+bp = APIBlueprint('loan', __name__, url_prefix='/catalogs/loans')
 
 CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
 CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")
@@ -23,11 +23,11 @@ renew_loan_schema = RenewLoanSchema()
 
 
 @bp.post('')
-def create():
-    request_data = request.get_json()
-    data = loan_schema.load(request_data)
+@doc("Create a loan")
+@input(LoanSchema)
+@output(LoanSchema)
+def create(data: dict):
     try:
-        current_app.logger.warning(data.get('borrower'))
         response = GRPC_STUB.Create(book_instance_pb2.BookInstance(
             id=data.get('id'),
             book=data.get('book'),
@@ -40,13 +40,14 @@ def create():
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
     current_app.logger.warning(response)
-    return loan_schema.dump(response)
+    return response
 
 
 @bp.put('/<uuid:loan_uuid>/renew')
-def update(loan_uuid: UUID):
-    request_data = request.get_json()
-    data = renew_loan_schema.load(request_data)
+@doc("Renew a book on loan")
+@input(RenewLoanSchema)
+@output(LoanSchema)
+def update(loan_uuid: UUID, data: dict):
     try:
         response = GRPC_STUB.Renew(book_instance_pb2.BookInstanceRenewal(
             id=loan_uuid.hex,
@@ -56,14 +57,15 @@ def update(loan_uuid: UUID):
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
 
-    return renew_loan_schema.dump(response)
+    return response
 
 
 @bp.get('/my')
+@doc("Get my loans")
+@input(LoanSchema(partial=True))
+@output(LoanSchema(many=True))
 @returns_json
-def get():
-    request_data = request.get_json()
-    data = loan_schema.load(request_data, partial=True)
+def get(data: dict):
     try:
         response = GRPC_STUB.MyList(book_instance_pb2.MyBookInstanceListRequest(
             borrower=data.get('borrower')
@@ -75,6 +77,8 @@ def get():
 
 
 @bp.get('')
+@doc("Get loans list")
+@output(LoanSchema(many=True))
 @returns_json
 def get_list():
     try:
