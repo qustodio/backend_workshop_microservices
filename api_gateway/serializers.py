@@ -61,3 +61,13 @@ class RenewLoanSchema(Schema):
     imprint = fields.Str(dump_only=True)
     borrower = fields.Int(dump_only=True)
     status = fields.Str(dump_only=True)
+
+
+class RecomendationSchema(Schema):
+    id = fields.Int()
+    title = fields.Str()
+    isbn = fields.Str()
+    summary = fields.Str()
+    author = fields.Int()
+    language = fields.Int()
+    genre = fields.List(fields.Int)

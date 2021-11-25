@@ -3,7 +3,7 @@ from uuid import UUID
 
 import grpc
 from apiflask import APIBlueprint, input, output, doc
-from flask import request, current_app
+from flask import current_app
 
 from common.pb2 import book_instance_pb2, book_instance_pb2_grpc
 from serializers import LoanSchema, RenewLoanSchema
