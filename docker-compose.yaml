@@ -25,10 +25,8 @@ services:
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
-        RECOMENDATOR_HOST: "recomendator"
+        RECOMENDATOR_HOST: "recomendator-async"
         RECOMENDATOR_PORT: 50051
-        RECOMENDATOR_ASYNC_HOST: "recomendator-async"
-        RECOMENDATOR_ASYNC_PORT: 50051
         FLASK_ENV: "development"
     networks:
       - catalog
@@ -94,7 +92,7 @@ services:
       - catalog
     volumes:
       - ./recomendator-async:/opt/recomendator
-      - ./common:/opt/recomendator/common
+      - ./common:/usr/local/lib/python3.8/site-packages/common
 
   recomendator-db:
     image: "postgres:11"
