@@ -18,12 +18,7 @@ minikube tunnel
 ```
 
 
-# Install plugins
-
-`minikube addons enable ingress`
-
-
-# Run dashboard
+# Run dashboard (optional)
 
 `minikube dashboard`
 
@@ -81,22 +76,6 @@ helm install RELEASE-NAME ./chart --values ./chart/values.yaml -n qbooks
 ```
 
 # Access the application
-
-## Kubernetes ingress
-Get minikube's IP:
-```
-minikube ip
-```
-
-Add the following line to your `/etc/hosts` file (being MINIKUBE_IP the IP obtained with the previous command):
-```
-MINIKUBE_IP qbooks.com
-```
-
-You can now access your application's ingress withyour browser by just accessing `qbooks.com`
-
-
-## Istio ingress gateway
 
 Get the ingress' external IP:
 ```
