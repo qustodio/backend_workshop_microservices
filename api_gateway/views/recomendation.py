@@ -16,6 +16,7 @@ RECOMENDATOR_PORT = os.getenv("RECOMENDATOR_PORT", "50051")
 GRPC_CHANNEL = grpc.insecure_channel(f"{RECOMENDATOR_HOST}:{RECOMENDATOR_PORT}")
 GRPC_STUB = recomendations_pb2_grpc.RecomendationsControllerStub(GRPC_CHANNEL)
 
+
 @bp.get('/<int:user_id>')
 @returns_json
 def get_list(user_id: int):
