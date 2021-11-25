@@ -61,3 +61,13 @@ class RenewLoanSchema(Schema):
     imprint = fields.Str(dump_only=True)
     borrower = fields.Int(dump_only=True)
     status = fields.Str(dump_only=True)
+
+
+class LanguageSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()
+
+
+class GenreSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()

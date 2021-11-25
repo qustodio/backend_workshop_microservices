@@ -6,8 +6,8 @@ from django_grpc_framework.protobuf.json_format import (
 )
 from rest_framework import serializers
 
-from catalog.models import Book, Author, BookInstance
-from common.pb2 import book_pb2, author_pb2, book_instance_pb2
+from catalog.models import Book, Author, BookInstance, Language, Genre
+from common.pb2 import book_pb2, author_pb2, book_instance_pb2, language_pb2, genre_pb2
 
 
 class BookProtoSerializer(proto_serializers.ModelProtoSerializer):
@@ -84,3 +84,17 @@ class BookInstanceRenewalProtoSerializer(proto_serializers.ModelProtoSerializer)
             raise proto_serializers.ValidationError('Invalid date - renewal more than 4 weeks ahead')
 
         return data
+
+
+class LanguageProtoSerializer(proto_serializers.ModelProtoSerializer):
+    class Meta:
+        model = Language
+        proto_class = language_pb2.Language
+        fields = ['id', 'name']
+
+
+class GenreProtoSerializer(proto_serializers.ModelProtoSerializer):
+    class Meta:
+        model = Genre
+        proto_class = genre_pb2.Genre
+        fields = ['id', 'name']
