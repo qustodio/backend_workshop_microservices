@@ -37,7 +37,7 @@ spec:
           args: ["flask run --host=0.0.0.0 --port={{ .Values.apiGateway.port}}"]
           env:
           - name: CATALOG_HOST
-            value: "{{ include "catalog.fullname" . }}-catalog"
+            value: "{{ include "catalog.fullname" . }}"
           - name: CATALOG_PORT
             value: "{{ .Values.catalog.service.port }}"
           - name: RECOMENDATOR_HOST

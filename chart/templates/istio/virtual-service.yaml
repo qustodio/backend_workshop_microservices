@@ -8,6 +8,16 @@ spec:
   http:
   - match:
     - uri:
+        prefix: "/api"
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: {{ include "catalog.fullname" . }}-api-gateway
+        port:
+          number: {{ .Values.apiGateway.service.port }}
+  - match:
+    - uri:
         prefix: "/static/admin"
     - uri:
         prefix: "/admin"
