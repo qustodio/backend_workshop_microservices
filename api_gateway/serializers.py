@@ -72,6 +72,7 @@ class RecomendationSchema(Schema):
     author = fields.Int()
     language = fields.Int()
     genre = fields.List(fields.Int)
+    image = fields.Str()
 
 
 class LanguageSchema(Schema):

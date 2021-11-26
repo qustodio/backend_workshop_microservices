@@ -14,6 +14,7 @@ message Book {
     repeated int32 genre = 5;
     string summary = 6;
     int32 language = 7;
+    string image = 8;
 }
 
 message RecomendationsRequest {
