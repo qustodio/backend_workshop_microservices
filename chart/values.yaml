@@ -31,7 +31,7 @@ catalog:
   port: 50051
 
   image:
-    repository: catalog
+    repository: catalog-monolith
     pullPolicy: Never
     tag: "latest"
 
@@ -78,7 +78,7 @@ admin:
   replicaCount: 1
 
   image:
-    repository: catalog
+    repository: catalog-monolith
     pullPolicy: Never
     tag: "latest"
 
