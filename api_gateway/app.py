@@ -24,6 +24,9 @@ def identity(payload):
 
 app = APIFlask(__name__, docs_path='/docs/swagger-ui')
 
+app.config['SECRET_KEY'] = 'super-secret'
+app.config['JWT_VERIFY_EXPIRATION'] = False
+
 jwt = JWT(app, authenticate, identity)
 
 
