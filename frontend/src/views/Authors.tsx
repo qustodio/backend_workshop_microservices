@@ -1,6 +1,7 @@
 import Layout from '../components/Layout/Layout';
 import { useQuery } from 'react-query';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { fetchAuthors } from '../api';
 
 const Authors = () =>
   <Layout>
@@ -11,9 +12,7 @@ const Authors = () =>
   </Layout>
 
 const ListAuthors = () => {
-  const query = useQuery('authors', () =>
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/catalogs/authors`).then(res => res.json())
-  );
+  const query = useQuery('authors', fetchAuthors);
 
   return (
     <Grid container justifyContent="left" alignItems="stretch" spacing={2}>
