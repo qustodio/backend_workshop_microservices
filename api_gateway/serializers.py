@@ -71,3 +71,13 @@ class RecomendationSchema(Schema):
     author = fields.Int()
     language = fields.Int()
     genre = fields.List(fields.Int)
+
+
+class LanguageSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()
+
+
+class GenreSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()

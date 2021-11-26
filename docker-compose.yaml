@@ -72,8 +72,7 @@ services:
 
   recomendator:
     build:
-      context: .
-      dockerfile: recomendator/Dockerfile
+      context: ./recomendator/
     restart: always
     env_file:
       - compose.env
@@ -84,7 +83,7 @@ services:
       - catalog
     volumes:
       - ./recomendator:/opt/recomendator
-      - ./common:/opt/recomendator/common
+      - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
       - recomendator_db
 

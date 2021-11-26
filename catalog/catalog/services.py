@@ -2,9 +2,9 @@ import grpc
 from django_grpc_framework.services import Service
 from google.protobuf import empty_pb2
 
-from catalog.models import Book, Author, BookInstance
+from catalog.models import Book, Author, BookInstance, Language, Genre
 from catalog.serializers import BookProtoSerializer, AuthorProtoSerializer, BookInstanceProtoSerializer, \
-    BookInstanceRenewalProtoSerializer
+    BookInstanceRenewalProtoSerializer, LanguageProtoSerializer
 
 
 class BookService(Service):
@@ -118,3 +118,19 @@ class BookInstanceService(Service):
             return BookInstance.objects.filter(borrower=borrower).filter(status__exact='o').order_by('due_back')
         else:
             return BookInstance.objects.filter(status__exact='o').order_by('due_back')
+
+
+class LanguageService(Service):
+    def List(self, request, context):
+        languages = Language.objects.all()
+        serializer = LanguageProtoSerializer(languages, many=True)
+        for msg in serializer.message:
+            yield msg
+
+
+class GenreService(Service):
+    def List(self, request, context):
+        genres = Genre.objects.all()
+        serializer = LanguageProtoSerializer(genres, many=True)
+        for msg in serializer.message:
+            yield msg
