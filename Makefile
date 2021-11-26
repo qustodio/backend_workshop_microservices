@@ -32,4 +32,4 @@ migrate:
 fixtures:
 	@echo "Loading fixtures..."
 	docker-compose exec -T catalog sh -c "python manage.py loaddata catalog/fixtures/*.json"
-	docker-compose exec -T accounts sh -c "python manage.py loaddata users"
+	docker-compose exec -T accounts sh -c "python manage.py loaddata initial_users"

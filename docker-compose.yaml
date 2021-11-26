@@ -64,8 +64,8 @@ services:
     build:
       context: accounts
     restart: always
-    networks:
-      - catalog
+    env_file:
+      - compose_accounts.env
     volumes:
       - ./accounts:/opt/accounts
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -113,5 +113,8 @@ services:
     env_file:
       - compose_recommendator.env
 
-  accounts_db:
+  accounts-db:
     image: "postgres:11"
+    restart: always
+    env_file:
+      - compose_accounts.env
