@@ -22,11 +22,11 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='UserRecomendation',
+            name='UserRecommendation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('user', models.IntegerField()),
-                ('books', models.ManyToManyField(to='recomendations.Book')),
+                ('books', models.ManyToManyField(to='recommendations.Book')),
             ],
         ),
         migrations.CreateModel(

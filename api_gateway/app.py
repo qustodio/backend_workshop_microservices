@@ -72,5 +72,5 @@ from views import language
 app.register_blueprint(language.bp)
 from views import loan
 app.register_blueprint(loan.bp)
-from views import recomendation
-app.register_blueprint(recomendation.bp)
+from views import recommendation
+app.register_blueprint(recommendation.bp)

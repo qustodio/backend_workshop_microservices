@@ -11,10 +11,10 @@ from common.pb2 import (
     book_instance_pb2
 )
 
-from recomendations.models import Book, UserRecomendation
-from recomendations.serializers import BookRecomendationProtoSerializer
+from recommendations.models import Book, UserRecommendation
+from recommendations.serializers import BookRecommendationProtoSerializer
 
-class RecomendationService(Service):
+class RecommendationService(Service):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.grpc_catalog_channel = grpc.insecure_channel(
@@ -37,19 +37,19 @@ class RecomendationService(Service):
 
         
 
-        books = self.calculate_recomendations(
+        books = self.calculate_recommendations(
             books_readed=books_readed,
             recomended_authors=recomended_authors,
             recomended_genres=recomended_genres,
             all_books=books
         )
         book_instances = self.save_recomended_books(recomended_books=books)
-        UserRecomendation.objects.create(
+        UserRecommendation.objects.create(
             user=user_id,
         ).books.set(book_instances)
 
 
-        serializer = BookRecomendationProtoSerializer(books, many=True)
+        serializer = BookRecommendationProtoSerializer(books, many=True)
         for msg in serializer.message:
             yield msg
 
@@ -91,13 +91,13 @@ class RecomendationService(Service):
         
         return response
 
-    def calculate_recomendations(
+    def calculate_recommendations(
         self,
         books_readed,
         recomended_authors,
         recomended_genres,
         all_books,
-        num_recomendations=2
+        num_recommendations=2
     ):
         random_recomended_books = []
         recomended_books = []
@@ -105,10 +105,10 @@ class RecomendationService(Service):
             if book.id in books_readed:
                 continue
 
-            if len(recomended_books) >= num_recomendations:
+            if len(recomended_books) >= num_recommendations:
                 break
 
-            if len(random_recomended_books) < num_recomendations:
+            if len(random_recomended_books) < num_recommendations:
                 random_recomended_books.append(book)
 
             if book.author in recomended_authors:
