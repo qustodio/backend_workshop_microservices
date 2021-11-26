@@ -4,12 +4,20 @@ services:
   nginx:
     image: "nginx:1.19.8"
     restart: always
-    networks:
-      - catalog
     ports:
-      - "80:80"
+      - "8000:80"
     volumes:
       - ./compose/nginx/nginx.conf:/etc/nginx/nginx.conf
+
+  frontend:
+    build:
+      context: ./frontend
+    env_file:
+      - ./frontend/.env.example
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - "3000:80"
 
   api-gateway:
     build:
@@ -23,10 +31,6 @@ services:
         ACCOUNTS_HOST: "accounts"
         ACCOUNTS_PORT: 50051
         FLASK_ENV: "development"
-    networks:
-      - catalog
-    ports:
-      - "8080:5000"
     volumes:
       - ./api_gateway:/opt/api_gateway
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -37,8 +41,6 @@ services:
     restart: always
     env_file:
       - compose.env
-    networks:
-      - catalog
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -52,8 +54,6 @@ services:
     restart: always
     env_file:
       - compose.env
-    networks:
-      - catalog
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -79,8 +79,6 @@ services:
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
-    networks:
-      - catalog
     volumes:
       - ./recomendator:/opt/recomendator
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -92,19 +90,12 @@ services:
     restart: always
     env_file:
       - compose.env
-    networks:
-      - catalog
     
   recomendator_db:
     image: "postgres:11"
     restart: always
     env_file:
       - compose.env
-    networks:
-      - catalog
 
   accounts_db:
     image: "postgres:11"
-
-networks:
-  catalog:
