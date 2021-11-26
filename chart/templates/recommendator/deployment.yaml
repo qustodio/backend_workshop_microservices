@@ -34,7 +34,7 @@ spec:
           image: "{{ .Values.recommendator.image.repository }}:{{ .Values.recommendator.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.recommendator.image.pullPolicy }}
           command: ["/bin/sh", "-c"]
-          args: ["python manage.py grpcrunserver 0.0.0.0:{{ .Values.recommendator.port}}"]
+          args: ["python manage.py grpcrunserver 0.0.0.0:{{ .Values.recommendator.port}} --dev"]
           envFrom:
             - configMapRef:
                 name: {{ include "catalog.fullname" . }}-recommendator-db-config

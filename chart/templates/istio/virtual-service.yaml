@@ -8,7 +8,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: "/api"
+        prefix: "/api/"
     rewrite:
       uri: "/"
     route:

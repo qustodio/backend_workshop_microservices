@@ -10,6 +10,6 @@ spec:
     - port: {{ .Values.recommendator.service.port }}
       targetPort: {{ .Values.recommendator.port }}
       protocol: TCP
-      name: http
+      name: grpc
   selector:
     {{- include "recommendator.selectorLabels" . | nindent 4 }}

@@ -10,6 +10,6 @@ spec:
     - port: {{ .Values.catalog.service.port }}
       targetPort: {{ .Values.catalog.port }}
       protocol: TCP
-      name: http
+      name: grpc
   selector:
     {{- include "catalog.selectorLabels" . | nindent 4 }}
