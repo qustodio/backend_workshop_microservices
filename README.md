@@ -33,7 +33,7 @@ python -m grpc_tools.protoc --proto_path=protobufs
 --python_out=common/pb2 --grpc_python_out=common/pb2 ./protobufs/catalog/book.proto
 ```
 
-5. Modify the `model_pb2` import to match the correct package 
+5. Modify the `model_pb2_grpc.py` import to match the correct package 
    p.e:
 
       ```python
@@ -73,31 +73,45 @@ In this chapter the project is almost ready, but all the GRPC model, pb2 and ser
 
 1. Start in the root directory
 2. Create the Genre GRPC model:
-   1. `docker-compose run catalog python manage.py generateproto --model catalog.models.Genre --fields=id,title,author --file genre.proto`
+   1. `docker-compose run catalog python manage.py generateproto --model catalog.models.Genre --fields=name --file genre.proto`
 3. Place the `genre.proto` file in _protobufs/catalog_ directory.
 4. Create the Genre GRPC pb2 code:
-   1. `python -m grpc_tools.protoc --proto_path=protobufs --python_out=common/pb2 --grpc_python_out=common/pb2 ./protobufs/catalog/genre.proto`
+   1. You may need to install grpcio_tools for the next step `pip install grpcio-tools`
+   2. `python -m grpc_tools.protoc --proto_path=protobufs --python_out=common/pb2 --grpc_python_out=common/pb2 ./protobufs/catalog/genre.proto`
 5. Place the generated GRPC pb2 code under _common/pb2_ directory.
-6. Modify the `genre_pb2.py` import to match the correct package 
+6. Modify the `genre_pb2_grpc.py` import to match the correct package
    p.e:
 
       ```python
-      import genre_pb2 as genre__pb2  # FROM
-      from common.pb2 import genre_pb2 as genre__pb2  # TO
+      from catalog import genre_pb2 as catalog_dot_genre__pb2  # FROM
+      from common.pb2 import genre_pb2 as catalog_dot_genre__pb2  # TO
       ```
 
 7. Create a _GenreProtoSerializer_ class in _catalog/catalog/serializers.py_. Do not forget to:
    1. Define the class _Meta_.
    2. In meta, add the _model_, _proto_class_ and _fields_ attributes.
-   3. Fields attribute may contain the only to fields that represent the Genre model (id, name).
-8. Create a _LanguageService_ class in _catalog/catalog/services.py_.
+      1. Model = Genre
+      2. Proto Class = Genre class generated in genre_pb2
+      3. Fields = Genre fields to be serialized (Name)
+8. Create a _GenreService_ class in _catalog/catalog/services.py_.
    1. Define the _List_ method.
    2. Query all the Genre instances
    3. Serialize all the queried instances using the _GenreProtoSerializer_.
    4. Yield every serialized genre in serializer _message_ property.
-9. Register the servicer in the GRPC handler in _catalog/catalog/services.py_.
+9.  Register the servicer in the GRPC handler in _catalog/catalog/handlers.py_.
 
-#### VOILÀ!
+#### VOILÀ! (Maybe...)
+
+Remember that you may have to setup the application again as we added new services:
+
+```python
+make stop
+make build
+make run
+make migrations
+make migrate
+make fixtures
+```
 
 ### Testing
 
