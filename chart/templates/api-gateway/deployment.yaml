@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "catalog.fullname" . }}-api-gateway
+  name: {{ include "qbooks.fullname" . }}-api-gateway
   labels:
-    {{- include "catalog.labels" . | nindent 4 }}
+    {{- include "qbooks.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.apiGateway.autoscaling.enabled }}
   replicas: {{ .Values.apiGateway.replicaCount }}
@@ -24,7 +24,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      serviceAccountName: {{ include "qbooks.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.apiGateway.podSecurityContext | nindent 8 }}
       containers:
@@ -37,11 +37,11 @@ spec:
           args: ["flask run --host=0.0.0.0 --port={{ .Values.apiGateway.port}}"]
           env:
           - name: CATALOG_HOST
-            value: "{{ include "catalog.fullname" . }}"
+            value: "{{ include "qbooks.fullname" . }}-catalog"
           - name: CATALOG_PORT
             value: "{{ .Values.catalog.service.port }}"
           - name: recommendator_HOST
-            value: "{{ include "catalog.fullname" . }}-recommendator"
+            value: "{{ include "qbooks.fullname" . }}-recommendator"
           - name: recommendator_PORT
             value: "{{ .Values.recommendator.service.port }}"
           - name: FLASK_ENV

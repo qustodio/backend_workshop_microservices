@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "catalog.fullname" . }}
+  name: {{ include "qbooks.fullname" . }}-catalog
   labels:
-    {{- include "catalog.labels" . | nindent 4 }}
+    {{- include "qbooks.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.catalog.autoscaling.enabled }}
   replicas: {{ .Values.catalog.replicaCount }}
@@ -24,7 +24,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      serviceAccountName: {{ include "qbooks.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.catalog.podSecurityContext | nindent 8 }}
       containers:
@@ -37,9 +37,9 @@ spec:
           args: ["python manage.py grpcrunserver 0.0.0.0:{{ .Values.catalog.port }} --dev"]
           envFrom:
             - configMapRef:
-                name: {{ include "catalog.fullname" . }}-catalog-db-config
+                name: {{ include "qbooks.fullname" . }}-catalog-db-config
             - secretRef:
-                name: {{ include "catalog.fullname" . }}-catalog-db-secrets
+                name: {{ include "qbooks.fullname" . }}-catalog-db-secrets
           ports:
             - name: http
               containerPort: {{ .Values.catalog.port }}

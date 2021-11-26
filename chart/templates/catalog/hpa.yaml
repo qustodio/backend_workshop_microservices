@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "catalog.fullname" . }}
+  name: {{ include "qbooks.fullname" . }}-catalog
   labels:
-    {{- include "catalog.labels" . | nindent 4 }}
+    {{- include "qbooks.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "catalog.fullname" . }}
+    name: {{ include "qbooks.fullname" . }}-catalog
   minReplicas: {{ .Values.catalog.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.catalog.autoscaling.maxReplicas }}
   metrics:

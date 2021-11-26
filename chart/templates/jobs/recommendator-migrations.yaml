@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "catalog.fullname" . }}-recommendator-migrations
+  name: {{ include "qbooks.fullname" . }}-recommendator-migrations
   annotations:
     sidecar.istio.io/inject: "false"
 spec:
@@ -15,7 +15,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      serviceAccountName: {{ include "qbooks.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -28,9 +28,9 @@ spec:
           args: ["python manage.py migrate"]
           envFrom:
             - configMapRef:
-                name: {{ include "catalog.fullname" . }}-recommendator-db-config
+                name: {{ include "qbooks.fullname" . }}-recommendator-db-config
             - secretRef:
-                name: {{ include "catalog.fullname" . }}-recommendator-db-secrets
+                name: {{ include "qbooks.fullname" . }}-recommendator-db-secrets
           ports:
             - name: http
               containerPort: {{ .Values.recommendator.port }}

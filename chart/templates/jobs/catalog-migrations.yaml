@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "catalog.fullname" . }}-catalog-migrations
+  name: {{ include "qbooks.fullname" . }}-catalog-migrations
 spec:
   template:
     metadata:
@@ -13,7 +13,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      serviceAccountName: {{ include "qbooks.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -26,9 +26,9 @@ spec:
           args: ["python manage.py migrate && python manage.py loaddata fixtures/*.json"]
           envFrom:
             - configMapRef:
-                name: {{ include "catalog.fullname" . }}-catalog-db-config
+                name: {{ include "qbooks.fullname" . }}-catalog-db-config
             - secretRef:
-                name: {{ include "catalog.fullname" . }}-catalog-db-secrets
+                name: {{ include "qbooks.fullname" . }}-catalog-db-secrets
           ports:
             - name: http
               containerPort: {{ .Values.catalog.port }}

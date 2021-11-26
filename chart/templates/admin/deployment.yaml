@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "catalog.fullname" . }}-admin
+  name: {{ include "qbooks.fullname" . }}-admin
   labels:
-    {{- include "catalog.labels" . | nindent 4 }}
+    {{- include "qbooks.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.admin.autoscaling.enabled }}
   replicas: {{ .Values.admin.replicaCount }}
@@ -24,7 +24,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      serviceAccountName: {{ include "qbooks.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.admin.podSecurityContext | nindent 8 }}
       containers:
@@ -37,9 +37,9 @@ spec:
           args: ["python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:{{ .Values.admin.port}}"]
           envFrom:
             - configMapRef:
-                name: {{ include "catalog.fullname" . }}-catalog-db-config
+                name: {{ include "qbooks.fullname" . }}-catalog-db-config
             - secretRef:
-                name: {{ include "catalog.fullname" . }}-catalog-db-secrets
+                name: {{ include "qbooks.fullname" . }}-catalog-db-secrets
           ports:
             - name: http
               containerPort: {{ .Values.admin.port }}

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "catalog.fullname" . }}-recommendator-db-config
+  name: {{ include "qbooks.fullname" . }}-recommendator-db-config
 data:
   POSTGRES_HOST: "{{ .Release.Name }}-{{ .Values.recommendatorDb.nameOverride}}"
   POSTGRES_PORT: "{{ .Values.recommendatorDb.service.port }}"
