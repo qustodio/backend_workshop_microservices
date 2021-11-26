@@ -1,3 +1,5 @@
+# Making services asynchronous with CQRS
+
 ### Important info
 
 1. Django superuser (admin):
@@ -39,7 +41,7 @@ The MQTT service that we'll be using is [RabbitMQ](https://hub.docker.com/_/rabb
 7. Synchronize data using `make fixtures`
 8. Enjoy
 
-### What are you doing
+### What are you doing?
 
 This process will create a new queue and exchange in RabbitMQ
 where the events will be published using the topics specified in `CQRS_ID`
