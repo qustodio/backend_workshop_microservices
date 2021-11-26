@@ -189,28 +189,33 @@ We will install our application using the values file located in the chart's pat
 helm install qbooks-app ./chart --values ./chart/values.yaml -n qbooks
 ```
 
-# Accessing our application
+# Accessing the cluster
 
 ## What's about
 
-We will learn how to access our local application with the correct hostname.
-
-### Ingress' IP
-
-The cluster has an ingress configured. This ingress is the way kubernetes manages how external requests interact with its services.
-To get the IP of the ingress, we need to run the following command:
-```bash
-kubectl get svc istio-ingress -n istio-ingress
-```
-We are interested in the external IP.
+We will learn how to access our kubernetes applications.
 
 ### Hosts file
 
-We need to add an entry to the hosts file in our machine, to resolve the application's hostname to the ingress' IP.
-Add the following line to the `/etc/hosts` file, replacing `X.X.X.X`with the ingress' IP:
-`X.X.X.X    qbooks.com'`
+Add the following lines to `/etc/hosts`:
+```
+MINIKUBE_IP grafana.qbooks.com
+MINIKUBE_IP kiali.qbooks.com
+INGRESS_IP  qbooks.com
+```
 
-### Access the application
+To get the ingress' IP, run:
+```bash
+kubectl get svc istio-ingress -n istio-ingress
+```
 
-Access `qbooks.com` with your browser
+To get minikube's IP run:
+```bash
+minikube ip
+```
 
+### Access services
+
+Access `grafana.qbooks.com` to reach grafana
+Access `qbooks.com` to reach qbooks application
+Access `kiali.qbooks.com/kiali` to reach kiali
