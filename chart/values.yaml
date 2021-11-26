@@ -119,7 +119,7 @@ admin:
 frontend:
   enabled: true
 
-  baseUrl: http://qbooks.com
+  baseUrl: /api
 
   port: 80
 
