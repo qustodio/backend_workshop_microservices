@@ -103,5 +103,8 @@ services:
     networks:
       - catalog
 
+  accounts_db:
+    image: "postgres:11"
+
 networks:
   catalog:
