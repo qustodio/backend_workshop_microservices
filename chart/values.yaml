@@ -210,8 +210,8 @@ apiGateway:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 
-### Recomendator ###
-recomendator:
+### recommendator ###
+recommendator:
   enabled: true
 
   port: 50051
@@ -219,7 +219,7 @@ recomendator:
   replicaCount: 1
 
   image:
-    repository: recomendator
+    repository: recommendator
     pullPolicy: Never
     tag: "latest"
 
@@ -271,9 +271,9 @@ catalogDb:
     port: 5432
 
 ### Recommendator DB ###
-recomendatorDb:
+recommendatorDb:
   enabled: true
-  nameOverride: recomendator-db
+  nameOverride: recommendator-db
   image:
     tag: 11.14.0
   postgresqlUsername: postgres

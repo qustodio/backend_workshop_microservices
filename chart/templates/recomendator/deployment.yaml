@@ -1,45 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "catalog.fullname" . }}-recomendator
+  name: {{ include "catalog.fullname" . }}-recommendator
   labels:
     {{- include "catalog.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.recomendator.autoscaling.enabled }}
-  replicas: {{ .Values.recomendator.replicaCount }}
+  {{- if not .Values.recommendator.autoscaling.enabled }}
+  replicas: {{ .Values.recommendator.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "recomendator.selectorLabels" . | nindent 6 }}
+      {{- include "recommendator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.recomendator.podAnnotations }}
+      {{- with .Values.recommendator.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "recomendator.selectorLabels" . | nindent 8 }}
+        {{- include "recommendator.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.recomendator.imagePullSecrets }}
+      {{- with .Values.recommendator.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "catalog.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.recomendator.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.recommendator.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.recomendator.securityContext | nindent 12 }}
-          image: "{{ .Values.recomendator.image.repository }}:{{ .Values.recomendator.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.recomendator.image.pullPolicy }}
+            {{- toYaml .Values.recommendator.securityContext | nindent 12 }}
+          image: "{{ .Values.recommendator.image.repository }}:{{ .Values.recommendator.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.recommendator.image.pullPolicy }}
           command: ["/bin/sh", "-c"]
-          args: ["python manage.py grpcrunserver 0.0.0.0:{{ .Values.recomendator.port}}"]
+          args: ["python manage.py grpcrunserver 0.0.0.0:{{ .Values.recommendator.port}}"]
           envFrom:
             - configMapRef:
-                name: {{ include "catalog.fullname" . }}-recomendator-db-config
+                name: {{ include "catalog.fullname" . }}-recommendator-db-config
             - secretRef:
-                name: {{ include "catalog.fullname" . }}-recomendator-db-secrets
+                name: {{ include "catalog.fullname" . }}-recommendator-db-secrets
           env:
             - name: CATALOG_HOST
               value: "{{ include "catalog.fullname" . }}-catalog"
@@ -47,7 +47,7 @@ spec:
               value: "{{ .Values.catalog.service.port }}"
           ports:
             - name: http
-              containerPort: {{ .Values.recomendator.port }}
+              containerPort: {{ .Values.recommendator.port }}
               protocol: TCP
           livenessProbe:
             tcpSocket:
@@ -56,16 +56,16 @@ spec:
             tcpSocket:
               port: http
           resources:
-            {{- toYaml .Values.recomendator.resources | nindent 12 }}
-      {{- with .Values.recomendator.nodeSelector }}
+            {{- toYaml .Values.recommendator.resources | nindent 12 }}
+      {{- with .Values.recommendator.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.recomendator.affinity }}
+      {{- with .Values.recommendator.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.recomendator.tolerations }}
+      {{- with .Values.recommendator.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

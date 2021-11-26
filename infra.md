@@ -180,7 +180,7 @@ To make our local images available to minikube, we first need to load some envir
 eval $(minikube docker-env)
 docker build -t catalog:latest ./catalog
 docker build -t api-gateway:latest ./api_gateway
-docker build -t recomendator:latest ./recomendator
+docker build -t recommendator:latest ./recommendator
 docker build -t frontend:latest ./frontend
 ```
 

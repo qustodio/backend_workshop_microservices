@@ -40,10 +40,10 @@ spec:
             value: "{{ include "catalog.fullname" . }}"
           - name: CATALOG_PORT
             value: "{{ .Values.catalog.service.port }}"
-          - name: RECOMENDATOR_HOST
-            value: "{{ include "catalog.fullname" . }}-recomendator"
-          - name: RECOMENDATOR_PORT
-            value: "{{ .Values.recomendator.service.port }}"
+          - name: recommendator_HOST
+            value: "{{ include "catalog.fullname" . }}-recommendator"
+          - name: recommendator_PORT
+            value: "{{ .Values.recommendator.service.port }}"
           - name: FLASK_ENV
             value: "{{ .Values.apiGateway.flaskEnv }}"
           ports:

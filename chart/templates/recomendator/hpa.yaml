@@ -1,28 +1,28 @@
-{{- if .Values.recomendator.autoscaling.enabled }}
+{{- if .Values.recommendator.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "catalog.fullname" . }}-recomendator
+  name: {{ include "catalog.fullname" . }}-recommendator
   labels:
     {{- include "catalog.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "catalog.fullname" . }}-recomendator
-  minReplicas: {{ .Values.recomendator.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.recomendator.autoscaling.maxReplicas }}
+    name: {{ include "catalog.fullname" . }}-recommendator
+  minReplicas: {{ .Values.recommendator.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.recommendator.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.recomendator.autoscaling.targetCPUUtilizationPercentage }}
+    {{- if .Values.recommendator.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.recomendator.autoscaling.targetCPUUtilizationPercentage }}
+        targetAverageUtilization: {{ .Values.recommendator.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
-    {{- if .Values.recomendator.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- if .Values.recommendator.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.recomendator.autoscaling.targetMemoryUtilizationPercentage }}
+        targetAverageUtilization: {{ .Values.recommendator.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
 {{- end }}

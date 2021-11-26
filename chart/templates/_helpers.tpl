@@ -67,10 +67,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Recomendator selector labels
+recommendator selector labels
 */}}
-{{- define "recomendator.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "catalog.name" . }}-recomendator
+{{- define "recommendator.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "catalog.name" . }}-recommendator
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 

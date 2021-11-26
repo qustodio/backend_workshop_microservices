@@ -96,6 +96,9 @@ ENV/
 # VSCode
 .vscode
 
+# Pycharm
+.idea
+
 # Helm
 */charts
 requirements.lock
