@@ -27,7 +27,7 @@ The MQTT service that we'll be using is [RabbitMQ](https://hub.docker.com/_/rabb
 
 1. Find the producer `models.Model` you want to sync.
    1. In this branch, **`catalog.models.Book`** could be your producer
-2. Setup the replica `models.Model` to sync with the producer.
+2. Find the replica `models.Model` to sync with the producer.
    1. In this branch, **`recomendator-async.models.Book`** should be your replica
    2. The replica model does'nt have to be exactly the same as the producer.
    3. Note that the replica model will receive the producer model events.
@@ -39,7 +39,7 @@ The MQTT service that we'll be using is [RabbitMQ](https://hub.docker.com/_/rabb
    2. `CQRS_ID` should be the same between both models
    3. `CQRS_FIELDS` identifies the model fields to be sent throught MQTT. It have to contain
       the model `pk`
-   4. **catalog.models.Book** should also implement `CQRS_FIELDS` to avoid sending the image or genre fields, you will have to add also `id` to the array as it is the `PK`
+   4. **catalog.models.Book** should also implement `CQRS_FIELDS` to avoid sending the image or genre fields, you may have to also add `id` to the array as it is the `PK`
 
       ```python
       CQRS_ID = 'book'
@@ -53,12 +53,31 @@ The MQTT service that we'll be using is [RabbitMQ](https://hub.docker.com/_/rabb
       )
       ```
 
-5. Run `make migrations`
-6. Run `make migrate`
-7. Synchronize data using `make fixtures`
-8. Enjoy
+5. Refresh the deploy
+   1. `make stop`
+   2. `make build`
+   3. `make run`
+   4. `make migrations`
+   5. `make migrate`
+   6. `make fixtures`
+6. Enjoy (Hopefully)
 
 ### What are you doing?
 
 This process will create a new queue and exchange in RabbitMQ
 where the events will be published using the topics specified in `CQRS_ID`
+
+When ever a new `catalog.model.User` is created/updated/modified/deleted a new event with this data
+is published in the MQTT with `CQRS_ID` other models in other services with the same `CQRS_ID` will then consume
+the events and process the received data.
+
+### Remember to setup the app
+
+```bash
+make stop
+make build
+make run
+make migrations
+make migrate
+make fixtures
+```

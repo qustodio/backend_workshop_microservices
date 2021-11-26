@@ -34,8 +34,17 @@ class Language(MasterMixin, models.Model):
         return self.name
 
 
-class Book(models.Model):
+# TODO: Make this model to be the source of truth of recommendator-async.models.Book
+class Book(MasterMixin, models.Model):
     """Model representing a book (but not a specific copy of a book)."""
+    CQRS_ID = 'books'
+    CQRS_FIELDS = [
+        'id',
+        'title',
+        'summary',
+        'isbn',
+        'language'
+    ]
 
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
