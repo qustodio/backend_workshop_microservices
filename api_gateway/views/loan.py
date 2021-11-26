@@ -4,6 +4,7 @@ from uuid import UUID
 import grpc
 from apiflask import APIBlueprint, input, output, doc
 from flask import current_app
+from flask_jwt import jwt_required
 
 from common.pb2 import book_instance_pb2, book_instance_pb2_grpc
 from serializers import LoanSchema, RenewLoanSchema
@@ -26,6 +27,7 @@ renew_loan_schema = RenewLoanSchema()
 @doc("Create a loan")
 @input(LoanSchema)
 @output(LoanSchema)
+@jwt_required()
 def create(data: dict):
     try:
         response = GRPC_STUB.Create(book_instance_pb2.BookInstance(
@@ -47,6 +49,7 @@ def create(data: dict):
 @doc("Renew a book on loan")
 @input(RenewLoanSchema)
 @output(LoanSchema)
+@jwt_required()
 def update(loan_uuid: UUID, data: dict):
     try:
         response = GRPC_STUB.Renew(book_instance_pb2.BookInstanceRenewal(
@@ -65,6 +68,7 @@ def update(loan_uuid: UUID, data: dict):
 @input(LoanSchema(partial=True))
 @output(LoanSchema(many=True))
 @returns_json
+@jwt_required()
 def get(data: dict):
     try:
         response = GRPC_STUB.MyList(book_instance_pb2.MyBookInstanceListRequest(
@@ -80,6 +84,7 @@ def get(data: dict):
 @doc("Get loans list")
 @output(LoanSchema(many=True))
 @returns_json
+@jwt_required()
 def get_list():
     try:
         response = GRPC_STUB.List(book_instance_pb2.BookInstanceListRequest())
