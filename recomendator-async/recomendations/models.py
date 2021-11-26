@@ -24,20 +24,6 @@ class Book(ReplicaMixin, models.Model):
                                       '">ISBN number</a>')
     genre = models.ManyToManyField(Genre, help_text="Select a genre for this book")
     language = models.IntegerField()
-    
-    class Meta:
-        ordering = ['title', 'author']
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.title
-
-    @classmethod
-    def cqrs_create(cls, sync, mapped_data, previous_data=None):
-        super().cqrs_create(sync, mapped_data, previous_data)
-
-    def cqrs_update(self, sync, mapped_data, previous_data=None):
-        super().cqrs_update(sync, mapped_data, previous_data)
 
 class BookInstance(ReplicaMixin, models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""

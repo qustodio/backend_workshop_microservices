@@ -8,11 +8,7 @@ from django.contrib.auth.models import UserManager, AbstractUser
 from dj_cqrs.mixins import MasterMixin
 
 
-class LibraryUser(MasterMixin, AbstractUser):
-    CQRS_ID = 'user'
-    objects = UserManager()
-
-class Genre(MasterMixin, models.Model):
+class Genre(models.Model):
     """Model representing a book genre (e.g. Science Fiction, Non Fiction)."""
     CQRS_ID = 'genre'
 

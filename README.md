@@ -1,50 +1,45 @@
 ### Important info
+
 1. Django superuser (admin):
+
 ```json
 {
   "username": "qustodio", 
   "password": "pyday123"
 }
 ```
-2. Repo with the common grpc code (pb2):
-   1. [Link](https://pypi.org/project/qservices-library)
-   2. Package installation: `pip install qservices-library`
 
-### How to create all the boilerplate code for a gRPC model
-1. Create the proto model:
-```bash
-# Needs to be in the container to have access 
-# to the proper tools and paths
-docker-compose run catalog python manage.py generateproto 
---model catalog.models.Book --fields=id,title,author --file book.proto
-```
-2. Copy&Paste the generated proto-model (from previous step) into _protobufs/catalog/book.proto_
-3. Change the package name in book.proto (line 3) to catalog.
-4. Create the gRPC model code (pb2):
-```bash
-python -m grpc_tools.protoc --proto_path=protobufs 
---python_out=common/pb2 --grpc_python_out=common/pb2 ./protobufs/catalog/book.proto
-```
-7. Create the serializer class BookProtoSerializer (in catalog/catalog/serializers.py)
-8. Create the service class BookService (in catalog/catalog/services.py)
-9. Register the service in the grpc handler (in catalog/catalog/handlers.py)
-```bash
-book_pb2_grpc.add_BookControllerServicer_to_server(
-    BookService.as_servicer(), 
-    server
-)
-```
+### CQRS
 
+(Command and Query Responsability Segregation)
+Uses a MQTT service to comunicate commands to different services that are 'subscribed' to them;
+    p.e:
+        - A new user is created
+        - A command telling that the user is created
+        - A service receives the command with the created user and process the data
 
-### Create DB service (docker compose local)
-- Create DB service
-    - Use the desired docker image for the DB
-    - Include service to the network
-    - Use environment variables to config container (should be in the image's documentation):
-        - Username
-        - Password
-        - Db name
-- Change django settings to use the container as the database
-    - Use credentials set on the container
-    - Use the db service as the database hostname
+The MQTT service that we'll be using is [RabbitMQ](https://hub.docker.com/_/rabbitmq).
+[django-cqrs](https://github.com/cloudblue/django-cqrs) will be used in order to sync django models.
 
+### How to setup django-cqrs models to sync
+
+1. Find the producer `models.Model` you want to sync.
+   1. In this branch, **`catalog.models.Book`** could be your producer
+2. Setup the replica `models.Model` to sync with the producer.
+   1. In this branch, **`recomendator-async.models.Book`** should be your replica
+   2. The replica model does'nt have to be exactly the same as the producer.
+   3. Note that the replica model will receive the producer model events.
+3. Implement Mixins
+   1. The producer should implement `dj_cqrs.mixins.MasterMixin`
+   2. The replica should implement  `dj_cqrs.mixins.ReplicaMixin`
+4. Setup model `CQRS_ID` class variable to identify the events
+   1. `CQRS_ID` is an string that identifies the events inside of the MQTT service
+5. Run `make migrations`
+6. Run `make migrate`
+7. Synchronize data using `make fixtures`
+8. Enjoy
+
+### What are you doing
+
+This process will create a new queue and exchange in RabbitMQ
+where the events will be published using the topics specified in `CQRS_ID`
