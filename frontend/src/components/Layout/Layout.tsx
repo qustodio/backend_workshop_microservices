@@ -3,10 +3,11 @@ import {
   Home as HomeIcon,
   LibraryBooks as LibraryBooksIcon,
   People as PeopleIcon,
-  Login as LoginIcon
+  Login as LoginIcon,
 } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { Link } from 'react-router-dom';
+import { useAuth } from "../../lib/auth";
 
 const drawerWidth = 240;
 
@@ -36,11 +37,19 @@ const menuTop = [
   }
 ];
 
-const menuBottom = [
+const menuLogin = [
   {
     icon: <LoginIcon />,
     label: 'Login',
     link: '/login'
+  }
+];
+
+const menuUserLogged = [
+  {
+    icon: <LibraryBooksIcon />,
+    label: 'My loans',
+    link: '/loans'
   }
 ];
 
@@ -58,6 +67,8 @@ const Layout = ({children}: {children: JSX.Element}) =>
   </Box>
 
 const Menu = () => {
+  const { user } = useAuth();
+
   const renderMenu = (menu: Menu) => (
     menu.map((item, index) => (
       <Link to={item.link} >
@@ -94,7 +105,7 @@ const Menu = () => {
         </List>
         <Divider />
         <List>
-          {renderMenu(menuBottom)}
+          {user ? renderMenu(menuUserLogged) : renderMenu(menuLogin)}
         </List>
       </Drawer>
     </Box>
