@@ -2,7 +2,7 @@ import grpc
 from django_grpc_framework.services import Service
 from google.protobuf import empty_pb2
 
-from catalog.models import Book, Author, BookInstance, Language, Genre
+from catalog.models import Book, Author, BookInstance, Language
 from catalog.serializers import BookProtoSerializer, AuthorProtoSerializer, BookInstanceProtoSerializer, \
     BookInstanceRenewalProtoSerializer, LanguageProtoSerializer
 
@@ -128,9 +128,4 @@ class LanguageService(Service):
             yield msg
 
 
-class GenreService(Service):
-    def List(self, request, context):
-        genres = Genre.objects.all()
-        serializer = LanguageProtoSerializer(genres, many=True)
-        for msg in serializer.message:
-            yield msg
+# TODO Create the GenreService with the List method
