@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.db.models import Q
 # Create your views here.
 
-from .models import Book, Author, BookInstance, User, UserRecomendations
+from .models import Book, Author, BookInstance, User, UserRecommendations
 
 
 def index(request):
@@ -40,8 +40,8 @@ class BookListView(generic.ListView):
     paginate_by = 10
 
 
-class BookRecomendationsView(generic.ListView):
-    template_name = 'catalog/book_recomendations.html'
+class BookRecommendationsView(generic.ListView):
+    template_name = 'catalog/book_recommendations.html'
 
     def get_queryset(self):
         return Book.objects.all()
@@ -54,15 +54,15 @@ class BookRecomendationsView(generic.ListView):
             ).values('book')
         ).prefetch_related('genre', 'author')
 
-        recomendations = queryset.filter(
+        recommendations = queryset.filter(
             Q(author__in=books_read.values('author'))
             | 
             Q(genre__in=books_read.values('genre'))
         ).distinct()
 
-        return recomendations
+        return recommendations
 
-    def random_recomendations(self, length=2):
+    def random_recommendations(self, length=2):
         return self.get_queryset()[:length]
 
     def get(self, request, user_pk):
@@ -73,9 +73,9 @@ class BookRecomendationsView(generic.ListView):
             return HttpResponseNotFound()
         
         if len(self.object_list) == 0:
-            self.object_list = self.random_recomendations()
+            self.object_list = self.random_recommendations()
 
-        UserRecomendations.objects.create(
+        UserRecommendations.objects.create(
             user = User.objects.get(pk=user_pk)
         ).books.set(self.object_list)
 

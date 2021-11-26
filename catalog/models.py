@@ -124,6 +124,6 @@ class Author(models.Model):
         return '{0}, {1}'.format(self.last_name, self.first_name)
 
 
-class UserRecomendations(models.Model):
+class UserRecommendations(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     books = models.ManyToManyField(Book)
