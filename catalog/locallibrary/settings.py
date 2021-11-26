@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&k3q+pmu)5%asj6yjpkag')
 
-DATABASE_HOST = os.environ.get('POSTGRES_HOST', '')
+DATABASE_HOST = os.environ.get('POSTGRES_CATALOG_HOST', '')
 DATABASE_USERNAME = os.environ.get('POSTGRES_USERNAME', '')
 DATABASE_PASSWORD = os.environ.get('POSTGRES_PASSWORD', '')
 DATABASE_PORT = os.environ.get('POSTGRES_PORT', '')
