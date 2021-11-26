@@ -48,6 +48,8 @@ Catalog selector labels
 {{- define "catalog.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "qbooks.name" . }}-catalog
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: qbooks
+version: 0.0.1
 {{- end }}
 
 {{/*
@@ -56,6 +58,8 @@ Frontend selector labels
 {{- define "frontend.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "qbooks.name" . }}-frontend
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: qbooks
+version: 0.0.1
 {{- end }}
 
 {{/*
@@ -63,6 +67,8 @@ Admin selector labels
 */}}
 {{- define "admin.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "qbooks.name" . }}-admin
+app: qbooks
+version: 0.0.1
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -72,6 +78,8 @@ recommendator selector labels
 {{- define "recommendator.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "qbooks.name" . }}-recommendator
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: qbooks
+version: 0.0.1
 {{- end }}
 
 {{/*
@@ -80,6 +88,8 @@ Api gateway selector labels
 {{- define "apiGateway.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "qbooks.name" . }}-api-gateway
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: qbooks
+version: 0.0.1
 {{- end }}
 
 {{/*
