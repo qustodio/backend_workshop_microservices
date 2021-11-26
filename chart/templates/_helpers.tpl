@@ -51,6 +51,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Frontend selector labels
+*/}}
+{{- define "frontend.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "catalog.name" . }}-frontend
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
 Admin selector labels
 */}}
 {{- define "admin.selectorLabels" -}}

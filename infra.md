@@ -181,6 +181,7 @@ eval $(minikube docker-env)
 docker build -t catalog:latest ./catalog
 docker build -t api-gateway:latest ./api_gateway
 docker build -t recomendator:latest ./recomendator
+docker build -t frontend:latest ./frontend
 ```
 
 ### Install chart

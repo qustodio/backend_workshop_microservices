@@ -21,8 +21,8 @@ spec:
         prefix: "/"
     route:
     - destination:
-        host: {{ include "catalog.fullname" . }}
+        host: {{ include "catalog.fullname" . }}-frontend
         port:
-          number: {{ .Values.catalog.service.port }}
+          number: {{ .Values.frontend.service.port }}
   gateways:
   - {{ include "catalog.fullname" . }}-gateway
