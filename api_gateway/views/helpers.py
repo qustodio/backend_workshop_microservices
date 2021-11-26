@@ -1,5 +1,5 @@
 import werkzeug.exceptions
-from flask import Response, current_app
+from flask import Response
 from functools import wraps
 
 
