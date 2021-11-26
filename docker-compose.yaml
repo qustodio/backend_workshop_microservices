@@ -73,6 +73,22 @@ services:
     depends_on:
       - recommendator-db
 
+  locust-master:
+    image: locustio/locust
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./test_stress:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://locust-master:8089
+
+  locust-worker:
+    image: locustio/locust
+    volumes:
+      - ./test_stress:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust-master
+    deploy:
+      replicas: 2
+
   catalog-db:
     image: "postgres:11"
     restart: always

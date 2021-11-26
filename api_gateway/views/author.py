@@ -9,7 +9,7 @@ from common.pb2 import author_pb2_grpc, author_pb2
 from serializers import AuthorSchema
 from views.helpers import GRPCException, returns_json
 
-bp = APIBlueprint('author', __name__, url_prefix='/catalogs/authors')
+bp = APIBlueprint('author', __name__, url_prefix='/catalog/authors')
 
 CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
 CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")

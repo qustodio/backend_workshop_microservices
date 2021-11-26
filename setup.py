@@ -10,7 +10,7 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 # This call to setup() does all the work
 setup(
     name="qservices_library",
-    version="1.2",
+    version="1.5",
     description="Qustodio backend_workshop_microservices common repo",
     url="https://github.com/qustodio/backend_workshop_microservices",
     license="MIT",

@@ -77,10 +77,9 @@ class BookControllerServicer(object):
   def Destroy(self, request, context):
     # missing associated documentation comment in .proto file
     pass
-    print('IN DESTROY CONTROLLER')
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemente----d!')
-    raise NotImplementedError('Method not imple---mented!')
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
 
 def add_BookControllerServicer_to_server(servicer, server):
