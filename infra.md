@@ -121,6 +121,21 @@ Install the loki stack in its namespace
 helm upgrade --install loki --namespace=loki-stack grafana/loki-stack --values infra/loki/values.yml
 ```
 
+## Kiali
+
+Kiali is a management console for Istio.
+
+### Steps
+
+```bash
+# Add kiali helm repo
+helm repo add kiali https://kiali.org/helm-charts
+helm repo update
+
+# Install kiali chart
+helm install kiali-server kiali/kiali-server --namespace istio-system --values infra/kiali/values.yml
+```
+
 # Setting-up our application
 
 ## What's about
