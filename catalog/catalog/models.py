@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 from django.urls import reverse  # To generate URLS by reversing URL patterns
-from django.contrib.auth.models import UserManager, AbstractUser
+from django.contrib.auth.models import User
 
 from dj_cqrs.mixins import MasterMixin
 
@@ -37,6 +37,14 @@ class Language(MasterMixin, models.Model):
 class Book(MasterMixin, models.Model):
     """Model representing a book (but not a specific copy of a book)."""
     CQRS_ID = 'book'
+    CQRS_FIELDS = (
+        'id',
+        'title',
+        'author',
+        'summary',
+        'isbn',
+        'language'
+    )
 
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
@@ -86,7 +94,7 @@ class BookInstance(MasterMixin, models.Model):
     book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
-    borrower = models.ForeignKey(LibraryUser, on_delete=models.SET_NULL, null=True, blank=True)
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def pk(self):

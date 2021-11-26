@@ -1,23 +1,23 @@
 from django_grpc_framework.services import Service
 
-from recomendations.models import (
+from recommendations.models import (
     BookInstance,
     Book,
-    UserRecomendation
+    UserRecommendation
 )
-from recomendations.serializers import BookRecomendationProtoSerializer
+from recommendations.serializers import BookRecommendationProtoSerializer
 
-class RecomendationService(Service):
+class RecommendationService(Service):
     def List(self, request, context):
         user_id = request.id
 
-        recomendations = self.calculate_recomendations(user=user_id)
-        self.save_recomendations(
-            recomended_books=recomendations,
+        recommendations = self.calculate_recommendations(user=user_id)
+        self.save_recommendations(
+            recommended_books=recommendations,
             user=user_id
         )
 
-        serializer = BookRecomendationProtoSerializer(recomendations, many=True)
+        serializer = BookRecommendationProtoSerializer(recommendations, many=True)
         for msg in serializer.message:
             yield msg
 
@@ -30,7 +30,7 @@ class RecomendationService(Service):
     def get_book_instances_from_user(self, user_id):
         return BookInstance.objects.filter(borrower=user_id)
 
-    def calculate_recomendations(
+    def calculate_recommendations(
         self,
         user
     ):
@@ -39,22 +39,22 @@ class RecomendationService(Service):
         ).prefetch_related('book', 'book_author')
         authors = read_books.values('book__author')
 
-        recomendations = Book.objects.filter(
+        recommendations = Book.objects.filter(
             author__in=authors
         ).exclude(
             id__in=read_books.values('book__id')
         )
 
-        if len(recomendations) == 0:
-            recomendations = Book.objects.all().exclude(
+        if len(recommendations) == 0:
+            recommendations = Book.objects.all().exclude(
                 id__in=read_books.values('book__id')
             )[:2]
         
-        return recomendations
+        return recommendations
 
-    def save_recomendations(self, recomended_books, user):
-       UserRecomendation.objects.create(
+    def save_recommendations(self, recommended_books, user):
+       UserRecommendation.objects.create(
             user=user,
-        ).books.set(recomended_books)
+        ).books.set(recommended_books)
 
         

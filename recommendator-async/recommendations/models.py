@@ -28,7 +28,7 @@ class Book(ReplicaMixin, models.Model):
 class BookInstance(ReplicaMixin, models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
     CQRS_ID = 'book_instance'
-    CQRS_SERIALIZER = 'recomendat.serializers.BookInstanceSerializer'
+    CQRS_SERIALIZER = 'recommendat.serializers.BookInstanceSerializer'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Unique ID for this particular book across whole library")
@@ -69,6 +69,6 @@ class BookInstance(ReplicaMixin, models.Model):
         return '{0} ({1})'.format(self.id, self.book.title)
 
 
-class UserRecomendation(models.Model):
+class UserRecommendation(models.Model):
     user = models.IntegerField(null=False, blank=False)
     books = models.ManyToManyField(Book)

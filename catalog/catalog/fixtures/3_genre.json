@@ -3,96 +3,84 @@
         "model": "catalog.genre",
         "pk": 1,
         "fields": {
-            "name": "fantasy",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "fantasy"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 2,
         "fields": {
-            "name": "thriller",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "thriller"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 3,
         "fields": {
-            "name": "comedy",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "comedy"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 4,
         "fields": {
-            "name": "romance",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "romance"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 5,
         "fields": {
-            "name": "action",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "action"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 6,
         "fields": {
-            "name": "comic",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "comic"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 7,
         "fields": {
-            "name": "history",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "history"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 8,
         "fields": {
-            "name": "classics",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "classics"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 9,
         "fields": {
-            "name": "horror",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "horror"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 10,
         "fields": {
-            "name": "fiction",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "fiction"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 11,
         "fields": {
-            "name": "detective",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "detective"
         }
     },
     {
         "model": "catalog.genre",
         "pk": 12,
         "fields": {
-            "name": "sci-fi",
-            "cqrs_updated": "2021-11-17T10:08:32Z"
+            "name": "sci-fi"
         }
     }
 ]

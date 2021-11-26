@@ -13,9 +13,7 @@ services:
     image: "rabbitmq:3.9-management-alpine"
     ports:
       - "15672:15672"
-    networks:
-      - catalog
-  
+
   frontend:
     build:
       context: ./frontend
@@ -33,12 +31,14 @@ services:
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
-        RECOMENDATOR_HOST: "recomendator-async"
-        RECOMENDATOR_PORT: 50051
+        RECOMMENDATOR_HOST: "recommendator-async"
+        RECOMMENDATOR_PORT: 50051
         FLASK_ENV: "development"
     volumes:
       - ./api_gateway:/opt/api_gateway
       - ./common:/usr/local/lib/python3.8/site-packages/common
+    ports:
+      - "80:5000"
 
   catalog:
     build:
@@ -80,34 +80,29 @@ services:
     depends_on:
       - recommendator-db
 
-  recomendator-async:
+  recommendator-async:
     build:
-      context: recomendator-async
+      context: recommendator-async
       dockerfile: Dockerfile
     restart: always
     env_file:
-      - compose_recommendator_async
-    networks:
-      - catalog
+      - compose_recommendator_async.env
     volumes:
-      - ./recomendator-async:/opt/recomendator
+      - ./recommendator-async:/opt/recommendator
       - ./common:/usr/local/lib/python3.8/site-packages/common
 
-  recomendator-db:
+  recommendator-db:
     image: "postgres:11"
     restart: always
     env_file:
       - compose_recommendator.env
-    networks:
-      - catalog
 
-  recomendator-async-db:
+  recommendator-async-db:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose_recommendator_async
-    networks:
-      - catalog
+      - compose_recommendator_async.env
+
   locust-master:
     image: locustio/locust
     ports:
@@ -129,10 +124,3 @@ services:
     restart: always
     env_file:
       - compose_catalog.env
-    
-  recommendator-db:
-    image: "postgres:11"
-    restart: always
-    env_file:
-      - compose_recommendator.env
-
