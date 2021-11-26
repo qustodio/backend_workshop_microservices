@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "catalog.fullname" . }}-recomendator-migrations
+spec:
+  template:
+    spec:
+      restartPolicy: "OnFailure"
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: recomendator
+          securityContext:
+            {{- toYaml .Values.recomendator.securityContext | nindent 12 }}
+          image: "{{ .Values.recomendator.image.repository }}:{{ .Values.recomendator.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.recomendator.image.pullPolicy }}
+          command: ["/bin/sh","-c"]
+          args: ["python manage.py migrate"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "catalog.fullname" . }}-recomendator-db-config
+            - secretRef:
+                name: {{ include "catalog.fullname" . }}-recomendator-db-secrets
+          ports:
+            - name: http
+              containerPort: {{ .Values.recomendator.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.recomendator.resources | nindent 12 }}
+      {{- with .Values.recomendator.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.recomendator.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.recomendator.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+

@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "catalog.fullname" . }}-migrations
+  name: {{ include "catalog.fullname" . }}-catalog-migrations
 spec:
   template:
     spec:
@@ -23,9 +23,9 @@ spec:
           args: ["python manage.py migrate && python manage.py loaddata fixtures/*.json"]
           envFrom:
             - configMapRef:
-                name: {{ include "catalog.fullname" . }}-configs
+                name: {{ include "catalog.fullname" . }}-catalog-db-config
             - secretRef:
-                name: {{ include "catalog.fullname" . }}-secrets
+                name: {{ include "catalog.fullname" . }}-catalog-db-secrets
           ports:
             - name: http
               containerPort: {{ .Values.catalog.port }}

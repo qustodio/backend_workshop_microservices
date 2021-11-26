@@ -25,4 +25,11 @@ dependencies:
   - name: postgresql
     version: 8.6.4
     repository: https://charts.bitnami.com/bitnami
-    condition: postgresql.enabled
+    alias: catalogDb
+    condition: catalogDb.enabled
+  - name: postgresql
+    version: 8.6.4
+    repository: https://charts.bitnami.com/bitnami
+    alias: recomendatorDb
+    condition: recomendatorDb.enabled
+    

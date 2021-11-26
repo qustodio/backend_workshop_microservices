@@ -36,7 +36,7 @@ DATABASE_DB_NAME = os.environ.get('POSTGRES_DB', '')
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 # Set hosts to allow any app on Heroku and the local testing URL
-ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['qbooks.com', '127.0.0.1', 'localhost']
 
 
 # Application definition

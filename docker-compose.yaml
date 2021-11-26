@@ -42,7 +42,7 @@ services:
       context: ./catalog/
     restart: always
     env_file:
-      - compose.env
+      - catalog.env
     networks:
       - catalog
     volumes:
@@ -57,7 +57,7 @@ services:
     command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
     restart: always
     env_file:
-      - compose.env
+      - catalog.env
     networks:
       - catalog
     volumes:
@@ -71,7 +71,7 @@ services:
       context: ./recomendator/
     restart: always
     env_file:
-      - compose.env
+      - recomendator.env
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
@@ -87,7 +87,7 @@ services:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose.env
+      - catalog.env
     networks:
       - catalog
     
@@ -95,7 +95,7 @@ services:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose.env
+      - recomendator.env
     networks:
       - catalog
 

@@ -59,10 +59,18 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Recomendator selector labels
+*/}}
+{{- define "recomendator.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "catalog.name" . }}-recomendator
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
 Api gateway selector labels
 */}}
-{{- define "gateway.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "catalog.name" . }}-gateway
+{{- define "apiGateway.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "catalog.name" . }}-api-gateway
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 

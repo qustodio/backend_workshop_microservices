@@ -37,9 +37,9 @@ spec:
           args: ["python manage.py runserver 0.0.0.0:{{ .Values.catalog.port}}"]
           envFrom:
             - configMapRef:
-                name: {{ include "catalog.fullname" . }}-configs
+                name: {{ include "catalog.fullname" . }}-catalog-db-config
             - secretRef:
-                name: {{ include "catalog.fullname" . }}-secrets
+                name: {{ include "catalog.fullname" . }}-catalog-db-secrets
           ports:
             - name: http
               containerPort: {{ .Values.catalog.port }}

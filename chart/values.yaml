@@ -115,9 +115,117 @@ admin:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 
-### Postgres ###
-postgresql:
+### API-GATEWAY ###
+apiGateway:
+  replicaCount: 1
+
+  flaskEnv: development
+
+  port: 5000
+
+  image:
+    repository: api-gateway
+    pullPolicy: Never
+    tag: "latest"
+
+  imagePullSecrets: []
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  podAnnotations: {}
+
+  resources: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  service:
+    type: ClusterIP
+    port: 5000
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+### Recomendator ###
+recomendator:
   enabled: true
+
+  port: 50051
+
+  replicaCount: 1
+
+  image:
+    repository: recomendator
+    pullPolicy: Never
+    tag: "latest"
+
+  imagePullSecrets: []
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  podAnnotations: {}
+
+  resources: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  service:
+    type: ClusterIP
+    port: 50051
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+
+### Catalog DB ###
+catalogDb:
+  enabled: true
+  nameOverride: catalog-db
+  image:
+    tag: 11.14.0
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  postgresqlDatabase: qustodio
+  service:
+    type: ClusterIP
+    port: 5432
+
+### Recommendator DB ###
+recomendatorDb:
+  enabled: true
+  nameOverride: recomendator-db
   image:
     tag: 11.14.0
   postgresqlUsername: postgres

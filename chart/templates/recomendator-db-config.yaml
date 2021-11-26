@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "catalog.fullname" . }}-recomendator-db-config
+data:
+  POSTGRES_HOST: "{{ .Release.Name }}-{{ .Values.recomendatorDb.nameOverride}}"
+  POSTGRES_PORT: "{{ .Values.recomendatorDb.service.port }}"
+  POSTGRES_DB: "{{ .Values.recomendatorDb.postgresqlDatabase }}"
+
