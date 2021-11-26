@@ -1,8 +1,6 @@
 import hmac
-
 import marshmallow.exceptions
 import werkzeug.exceptions
-
 from common.pb2 import account_pb2
 from flask import jsonify
 from apiflask import APIFlask
@@ -29,6 +27,7 @@ app = APIFlask(__name__, docs_path='/docs/swagger-ui')
 jwt = JWT(app, authenticate, identity)
 
 
+@app.route('/')
 def index():
     return "Hello from Qustodio API Gateway!"
 
@@ -84,21 +83,16 @@ def handle_exception(error):
 
 
 from views import author
-
 app.register_blueprint(author.bp)
 from views import book
-
 app.register_blueprint(book.bp)
 from views import genre
 app.register_blueprint(genre.bp)
 from views import language
 app.register_blueprint(language.bp)
 from views import loan
-
 app.register_blueprint(loan.bp)
-from views import recomendation
-
-app.register_blueprint(recomendation.bp)
+from views import recommendation
+app.register_blueprint(recommendation.bp)
 from views import account
-
 app.register_blueprint(account.bp)

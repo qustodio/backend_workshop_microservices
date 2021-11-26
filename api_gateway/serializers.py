@@ -24,10 +24,11 @@ class BookSchema(Schema):
     id = fields.Int(required=True, dump_only=True)
     title = fields.Str(required=True)
     isbn = fields.Str(required=True, validate=validate.Regexp(isbn_regex_validator))
-    summary = fields.Str()
+    summary = fields.Str(allow_none=True)
     author = fields.Int(required=True)
     language = fields.Int(required=True)
     genre = fields.List(fields.Int, required=True)
+    image = fields.Str(allow_none=True)
 
 
 class AuthorSchema(Schema):
@@ -63,7 +64,7 @@ class RenewLoanSchema(Schema):
     status = fields.Str(dump_only=True)
 
 
-class RecomendationSchema(Schema):
+class RecommendationSchema(Schema):
     id = fields.Int()
     title = fields.Str()
     isbn = fields.Str()
@@ -71,6 +72,7 @@ class RecomendationSchema(Schema):
     author = fields.Int()
     language = fields.Int()
     genre = fields.List(fields.Int)
+    image = fields.Str()
 
 
 class LanguageSchema(Schema):

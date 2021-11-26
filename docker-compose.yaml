@@ -5,7 +5,7 @@ services:
     image: "nginx:1.19.8"
     restart: always
     ports:
-      - "8000:80"
+      - "8080:80"
     volumes:
       - ./compose/nginx/nginx.conf:/etc/nginx/nginx.conf
 
@@ -26,8 +26,8 @@ services:
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
-        RECOMENDATOR_HOST: "recomendator"
-        RECOMENDATOR_PORT: 50051
+        RECOMMENDATOR_HOST: "recommendator"
+        RECOMMENDATOR_PORT: 50051
         ACCOUNTS_HOST: "accounts"
         ACCOUNTS_PORT: 50051
         FLASK_ENV: "development"
@@ -40,12 +40,12 @@ services:
       context: ./catalog/
     restart: always
     env_file:
-      - compose.env
+      - compose_catalog.env
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - db
+      - catalog-db
 
   catalog-admin:
     build:
@@ -53,12 +53,12 @@ services:
     command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
     restart: always
     env_file:
-      - compose.env
+      - compose_catalog.env
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - db
+      - catalog-db
 
   accounts:
     build:
@@ -70,32 +70,48 @@ services:
       - ./accounts:/opt/accounts
       - ./common:/usr/local/lib/python3.8/site-packages/common
 
-  recomendator:
+  recommendator:
     build:
-      context: ./recomendator/
+      context: ./recommendator/
     restart: always
     env_file:
-      - compose.env
+      - compose_recommendator.env
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
     volumes:
-      - ./recomendator:/opt/recomendator
+      - ./recommendator:/opt/recommendator
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - recomendator_db
+      - recommendator-db
 
-  db:
+  locust-master:
+    image: locustio/locust
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./test_stress:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://locust-master:8089
+
+  locust-worker:
+    image: locustio/locust
+    volumes:
+      - ./test_stress:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust-master
+    deploy:
+      replicas: 2
+
+  catalog-db:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose.env
+      - compose_catalog.env
     
-  recomendator_db:
+  recommendator-db:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose.env
+      - compose_recommendator.env
 
   accounts_db:
     image: "postgres:11"

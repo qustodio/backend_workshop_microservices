@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='catalog',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x12\x63\x61talog/book.proto\x12\x07\x63\x61talog\x1a\x1bgoogle/protobuf/empty.proto\"q\n\x04\x42ook\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0c\n\x04isbn\x18\x03 \x01(\t\x12\x0e\n\x06\x61uthor\x18\x04 \x01(\x05\x12\r\n\x05genre\x18\x05 \x03(\x05\x12\x0f\n\x07summary\x18\x06 \x01(\t\x12\x10\n\x08language\x18\x07 \x01(\x05\"\x11\n\x0f\x42ookListRequest\"!\n\x13\x42ookRetrieveRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x32\x88\x02\n\x0e\x42ookController\x12\x33\n\x04List\x12\x18.catalog.BookListRequest\x1a\r.catalog.Book\"\x00\x30\x01\x12(\n\x06\x43reate\x12\r.catalog.Book\x1a\r.catalog.Book\"\x00\x12\x39\n\x08Retrieve\x12\x1c.catalog.BookRetrieveRequest\x1a\r.catalog.Book\"\x00\x12(\n\x06Update\x12\r.catalog.Book\x1a\r.catalog.Book\"\x00\x12\x32\n\x07\x44\x65stroy\x12\r.catalog.Book\x1a\x16.google.protobuf.Empty\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x12\x63\x61talog/book.proto\x12\x07\x63\x61talog\x1a\x1bgoogle/protobuf/empty.proto\"\x80\x01\n\x04\x42ook\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0c\n\x04isbn\x18\x03 \x01(\t\x12\x0e\n\x06\x61uthor\x18\x04 \x01(\x05\x12\r\n\x05genre\x18\x05 \x03(\x05\x12\x0f\n\x07summary\x18\x06 \x01(\t\x12\x10\n\x08language\x18\x07 \x01(\x05\x12\r\n\x05image\x18\x08 \x01(\t\"\x11\n\x0f\x42ookListRequest\"!\n\x13\x42ookRetrieveRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x32\x88\x02\n\x0e\x42ookController\x12\x33\n\x04List\x12\x18.catalog.BookListRequest\x1a\r.catalog.Book\"\x00\x30\x01\x12(\n\x06\x43reate\x12\r.catalog.Book\x1a\r.catalog.Book\"\x00\x12\x39\n\x08Retrieve\x12\x1c.catalog.BookRetrieveRequest\x1a\r.catalog.Book\"\x00\x12(\n\x06Update\x12\r.catalog.Book\x1a\r.catalog.Book\"\x00\x12\x32\n\x07\x44\x65stroy\x12\r.catalog.Book\x1a\x16.google.protobuf.Empty\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 
@@ -82,6 +82,13 @@ _BOOK = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='image', full_name='catalog.Book.image', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -94,8 +101,8 @@ _BOOK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=60,
-  serialized_end=173,
+  serialized_start=61,
+  serialized_end=189,
 )
 
 
@@ -118,8 +125,8 @@ _BOOKLISTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=175,
-  serialized_end=192,
+  serialized_start=191,
+  serialized_end=208,
 )
 
 
@@ -149,8 +156,8 @@ _BOOKRETRIEVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=194,
-  serialized_end=227,
+  serialized_start=210,
+  serialized_end=243,
 )
 
 DESCRIPTOR.message_types_by_name['Book'] = _BOOK
@@ -187,8 +194,8 @@ _BOOKCONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=230,
-  serialized_end=494,
+  serialized_start=246,
+  serialized_end=510,
   methods=[
   _descriptor.MethodDescriptor(
     name='List',
