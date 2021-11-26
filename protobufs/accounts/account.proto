@@ -22,5 +22,5 @@ message UserListRequest {
 }
 
 message UserRetrieveRequest {
-    string username = "test";
+    string username = 1;
 }

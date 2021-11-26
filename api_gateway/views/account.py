@@ -44,7 +44,6 @@ def post(data: dict):
 @doc('Retrieves back the data related with the logged user')
 @jwt_required()
 def get():
-    print(f'Going to: {current_identity}', flush=True)
     try:
         response = GRPC_STUB.Retrieve(account_pb2.User(id=user_id))
     except grpc.RpcError as rpc_error:

@@ -14,9 +14,6 @@ from views.helpers import GRPCException
 def authenticate(username, password):
     user_to_look = account_pb2.UserRetrieveRequest(username=username)
     user = account_stub.Retrieve(user_to_look)
-    # import pdb; pdb.set_trace()
-    print(f"Found user: {user}", flush=True)
-    print(f"{type(user)}", flush=True)
     if user and hmac.compare_digest(user.password.encode('utf-8'), password.encode('utf-8')):
         return user
 
