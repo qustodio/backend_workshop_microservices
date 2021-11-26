@@ -1,4 +1,5 @@
 import datetime
+import base64
 
 from django_grpc_framework import proto_serializers
 from django_grpc_framework.protobuf.json_format import (
@@ -9,13 +10,25 @@ from rest_framework import serializers
 from catalog.models import Book, Author, BookInstance, Language, Genre
 from common.pb2 import book_pb2, author_pb2, book_instance_pb2, language_pb2, genre_pb2
 
+
+class BinaryField(serializers.Field):
+    def to_representation(self, value):
+        value_hex = value.hex()
+        return value_hex
+
+    def to_internal_value(self, value):
+        value_bytes = value.encode()
+        return base64.encodebytes(value_bytes)
+
+
 class BookProtoSerializer(proto_serializers.ModelProtoSerializer):
-    summary = serializers.CharField(allow_blank=True)
+    summary = serializers.CharField(allow_null=True, allow_blank=True)
+    image = BinaryField(allow_null=True)
 
     class Meta:
         model = Book
         proto_class = book_pb2.Book
-        fields = ['id', 'title', 'isbn', 'summary', 'author', 'genre', 'language']
+        fields = ['id', 'title', 'isbn', 'summary', 'author', 'genre', 'language', 'image']
 
 
 class AuthorProtoSerializer(proto_serializers.ModelProtoSerializer):

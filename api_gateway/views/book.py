@@ -9,7 +9,7 @@ from common.pb2 import book_pb2, book_pb2_grpc
 from serializers import BookSchema
 from views.helpers import returns_json, GRPCException
 
-bp = APIBlueprint('book', __name__, url_prefix='/catalogs/books')
+bp = APIBlueprint('book', __name__, url_prefix='/catalog/books')
 
 CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
 CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")
@@ -33,7 +33,8 @@ def create(data: dict):
             author=data.get('author'),
             genre=data.get('genre'),
             summary=data.get('summary'),
-            language=data.get('language')
+            language=data.get('language'),
+            image=data.get('image')
         ))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
@@ -55,7 +56,8 @@ def update(book_id: int, data: dict):
             author=data.get('author'),
             genre=data.get('genre'),
             summary=data.get('summary'),
-            language=data.get('language')
+            language=data.get('language'),
+            image=data.get('image')
         ))
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())

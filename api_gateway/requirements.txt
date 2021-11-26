@@ -1,4 +1,4 @@
 APIFlask==0.10.0
 grpcio-tools~=1.30
 marshmallow==3.14.1
-qservices-library==1.2
+qservices-library
