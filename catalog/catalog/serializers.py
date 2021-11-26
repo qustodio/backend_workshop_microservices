@@ -13,8 +13,8 @@ from common.pb2 import book_pb2, author_pb2, book_instance_pb2, language_pb2, ge
 
 class BinaryField(serializers.Field):
     def to_representation(self, value):
-        value_bytes = base64.decodebytes(value)
-        return value_bytes.decode()
+        value_hex = value.hex()
+        return value_hex
 
     def to_internal_value(self, value):
         value_bytes = value.encode()
