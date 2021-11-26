@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package recomendator;
+package recommendator;
 
-service RecomendationsController {
-    rpc List(RecomendationsRequest) returns (stream Book) {}
+service RecommendationsController {
+    rpc List(RecommendationsRequest) returns (stream Book) {}
 }
 
 message Book {
@@ -16,6 +16,6 @@ message Book {
     int32 language = 7;
 }
 
-message RecomendationsRequest {
+message RecommendationsRequest {
     int32 id = 1;
 }

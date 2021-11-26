@@ -26,7 +26,7 @@ services:
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
-        RECOMENDATOR_HOST: "recomendator"
+        RECOMENDATOR_HOST: "recommendator"
         RECOMENDATOR_PORT: 50051
         FLASK_ENV: "development"
     volumes:
@@ -58,9 +58,9 @@ services:
     depends_on:
       - db
 
-  recomendator:
+  recommendator:
     build:
-      context: ./recomendator/
+      context: ./recommendator/
     restart: always
     env_file:
       - compose.env
@@ -68,10 +68,10 @@ services:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
     volumes:
-      - ./recomendator:/opt/recomendator
+      - ./recommendator:/opt/recommendator
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - recomendator_db
+      - recommendator_db
 
   db:
     image: "postgres:11"
@@ -79,7 +79,7 @@ services:
     env_file:
       - compose.env
     
-  recomendator_db:
+  recommendator_db:
     image: "postgres:11"
     restart: always
     env_file:
