@@ -34,7 +34,7 @@ class Language(MasterMixin, models.Model):
         return self.name
 
 
-class Book(MasterMixin, models.Model):
+class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
     CQRS_ID = 'book'
     CQRS_FIELDS = (
