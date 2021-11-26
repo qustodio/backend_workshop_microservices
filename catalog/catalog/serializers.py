@@ -1,5 +1,6 @@
 import datetime
 import base64
+import logging
 
 from django_grpc_framework import proto_serializers
 from django_grpc_framework.protobuf.json_format import (
@@ -13,8 +14,10 @@ from common.pb2 import book_pb2, author_pb2, book_instance_pb2, language_pb2, ge
 
 class BinaryField(serializers.Field):
     def to_representation(self, value):
-        value_hex = value.hex()
-        return value_hex
+        value_bytes = value.tobytes()
+        logging.warning(value_bytes)
+        values_decoded = base64.b64encode(value_bytes)
+        return values_decoded.decode('utf-8')
 
     def to_internal_value(self, value):
         value_bytes = value.encode()
