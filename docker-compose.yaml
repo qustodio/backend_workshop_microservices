@@ -5,7 +5,7 @@ services:
     image: "nginx:1.19.8"
     restart: always
     ports:
-      - "8000:80"
+      - "8080:80"
     volumes:
       - ./compose/nginx/nginx.conf:/etc/nginx/nginx.conf
 
@@ -43,7 +43,7 @@ services:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - db
+      - catalog-db
 
   catalog-admin:
     build:
@@ -56,7 +56,7 @@ services:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - db
+      - catalog-db
 
   recommendator:
     build:
@@ -71,15 +71,15 @@ services:
       - ./recommendator:/opt/recommendator
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - recommendator_db
+      - recomendator-db
 
-  db:
+  catalog-db:
     image: "postgres:11"
     restart: always
     env_file:
       - compose.env
     
-  recommendator_db:
+  recomendator-db:
     image: "postgres:11"
     restart: always
     env_file:
