@@ -10,10 +10,10 @@ from views.helpers import returns_json, GRPCException
 
 bp = APIBlueprint('recommendation', __name__, url_prefix='/recommendations')
 
-RECOMENDATOR_HOST = os.getenv("RECOMENDATOR_HOST", "localhost")
-RECOMENDATOR_PORT = os.getenv("RECOMENDATOR_PORT", "50051")
+RECOMMENDATOR_HOST = os.getenv("RECOMMENDATOR_HOST", "localhost")
+RECOMMENDATOR_PORT = os.getenv("RECOMMENDATOR_PORT", "50051")
 
-GRPC_CHANNEL = grpc.insecure_channel(f"{RECOMENDATOR_HOST}:{RECOMENDATOR_PORT}")
+GRPC_CHANNEL = grpc.insecure_channel(f"{RECOMMENDATOR_HOST}:{RECOMMENDATOR_PORT}")
 GRPC_STUB = recommendations_pb2_grpc.RecommendationsControllerStub(GRPC_CHANNEL)
 
 recommendations_schema = RecommendationSchema(many=True)
