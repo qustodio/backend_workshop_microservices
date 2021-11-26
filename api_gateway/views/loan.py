@@ -9,7 +9,7 @@ from common.pb2 import book_instance_pb2, book_instance_pb2_grpc
 from serializers import LoanSchema, RenewLoanSchema
 from views.helpers import GRPCException, returns_json
 
-bp = APIBlueprint('loan', __name__, url_prefix='/catalogs/loans')
+bp = APIBlueprint('loan', __name__, url_prefix='/catalog/loans')
 
 CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
 CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")

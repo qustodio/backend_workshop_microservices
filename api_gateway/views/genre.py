@@ -8,7 +8,7 @@ from common.pb2 import genre_pb2_grpc, genre_pb2
 from serializers import GenreSchema
 from views.helpers import GRPCException, returns_json
 
-bp = APIBlueprint('genre', __name__, url_prefix='/catalogs/genres')
+bp = APIBlueprint('genre', __name__, url_prefix='/catalog/genres')
 
 CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
 CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")

@@ -8,7 +8,7 @@ from common.pb2 import language_pb2_grpc, language_pb2
 from serializers import LanguageSchema
 from views.helpers import GRPCException, returns_json
 
-bp = APIBlueprint('language', __name__, url_prefix='/catalogs/languages')
+bp = APIBlueprint('language', __name__, url_prefix='/catalog/languages')
 
 CATALOG_HOST = os.getenv("CATALOG_HOST", "localhost")
 CATALOG_PORT = os.getenv("CATALOG_PORT", "50051")

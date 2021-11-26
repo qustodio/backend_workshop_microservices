@@ -8,6 +8,7 @@ from views.helpers import GRPCException
 app = APIFlask(__name__, docs_path='/docs/swagger-ui')
 
 
+@app.route('/')
 def index():
     return "Hello from Qustodio API Gateway!"
 
