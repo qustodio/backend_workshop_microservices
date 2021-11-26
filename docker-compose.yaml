@@ -69,6 +69,7 @@ services:
     volumes:
       - ./accounts:/opt/accounts
       - ./common:/usr/local/lib/python3.8/site-packages/common
+      - ./protobufs:/protobufs
 
   recommendator:
     build:

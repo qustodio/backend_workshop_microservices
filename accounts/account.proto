@@ -15,12 +15,13 @@ service UserController {
 message User {
     int32 id = 1;
     string username = 2;
-    string password = 3;
+    string email = 3;
+    repeated int32 groups = 4;
 }
 
 message UserListRequest {
 }
 
 message UserRetrieveRequest {
-    string username = "test";
+    string username = 1;
 }

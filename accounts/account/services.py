@@ -11,3 +11,4 @@ class UserService(
     """
     queryset = User.objects.all()
     serializer_class = UserProtoSerializer
+    lookup_field = 'username'

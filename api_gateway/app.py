@@ -12,7 +12,11 @@ from views.helpers import GRPCException
 
 # Authentication
 def authenticate(username, password):
-    user = account_stub.Retrieve(account_pb2.User(username=username))
+    user_to_look = account_pb2.UserRetrieveRequest(username=username)
+    user = account_stub.Retrieve(user_to_look)
+    # import pdb; pdb.set_trace()
+    print(f"Found user: {user}", flush=True)
+    print(f"{type(user)}", flush=True)
     if user and hmac.compare_digest(user.password.encode('utf-8'), password.encode('utf-8')):
         return user
 
@@ -26,6 +30,7 @@ app = APIFlask(__name__, docs_path='/docs/swagger-ui')
 
 app.config['SECRET_KEY'] = 'super-secret'
 app.config['JWT_VERIFY_EXPIRATION'] = False
+
 
 jwt = JWT(app, authenticate, identity)
 
