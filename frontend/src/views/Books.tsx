@@ -2,6 +2,7 @@ import { Card, CardActionArea, CardMedia, CardContent, Typography, Button, CardA
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout/Layout';
+import { fetchBooks } from '../api';
 
 const Books = () =>
   <Layout>
@@ -12,9 +13,7 @@ const Books = () =>
   </Layout>
 
 const ListBooks = () => {
-  const query = useQuery('books', () =>
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/catalogs/books`).then(res => res.json())
-  );
+  const query = useQuery('books', fetchBooks);
 
   return (
     <Grid container justifyContent="left" alignItems="stretch" spacing={2}>

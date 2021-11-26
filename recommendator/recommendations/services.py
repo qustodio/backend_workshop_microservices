@@ -11,10 +11,10 @@ from common.pb2 import (
     book_instance_pb2
 )
 
-from recomendations.models import Book, UserRecomendation
-from recomendations.serializers import BookRecomendationProtoSerializer
+from recommendations.models import Book, UserRecommendation
+from recommendations.serializers import BookRecommendationProtoSerializer
 
-class RecomendationService(Service):
+class RecommendationService(Service):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.grpc_catalog_channel = grpc.insecure_channel(
@@ -27,29 +27,29 @@ class RecomendationService(Service):
         books = self.get_all_books()
         book_intances = self.get_book_instances_from_user(user_id=user_id)
 
-        recomended_authors = []
-        recomended_genres = []
+        recommended_authors = []
+        recommended_genres = []
         books_readed = []
         for book_instance in book_intances:
-            recomended_authors.append(self.get_book(book_instance.book).author)
-            recomended_genres += list(self.get_book(book_instance.book).genre)
+            recommended_authors.append(self.get_book(book_instance.book).author)
+            recommended_genres += list(self.get_book(book_instance.book).genre)
             books_readed.append(book_instance.book)
 
         
 
-        books = self.calculate_recomendations(
+        books = self.calculate_recommendations(
             books_readed=books_readed,
-            recomended_authors=recomended_authors,
-            recomended_genres=recomended_genres,
+            recommended_authors=recommended_authors,
+            recommended_genres=recommended_genres,
             all_books=books
         )
-        book_instances = self.save_recomended_books(recomended_books=books)
-        UserRecomendation.objects.create(
+        book_instances = self.save_recommended_books(recommended_books=books)
+        UserRecommendation.objects.create(
             user=user_id,
         ).books.set(book_instances)
 
 
-        serializer = BookRecomendationProtoSerializer(books, many=True)
+        serializer = BookRecommendationProtoSerializer(books, many=True)
         for msg in serializer.message:
             yield msg
 
@@ -91,41 +91,41 @@ class RecomendationService(Service):
         
         return response
 
-    def calculate_recomendations(
+    def calculate_recommendations(
         self,
         books_readed,
-        recomended_authors,
-        recomended_genres,
+        recommended_authors,
+        recommended_genres,
         all_books,
-        num_recomendations=2
+        num_recommendations=2
     ):
-        random_recomended_books = []
-        recomended_books = []
+        random_recommended_books = []
+        recommended_books = []
         for book in all_books:
             if book.id in books_readed:
                 continue
 
-            if len(recomended_books) >= num_recomendations:
+            if len(recommended_books) >= num_recommendations:
                 break
 
-            if len(random_recomended_books) < num_recomendations:
-                random_recomended_books.append(book)
+            if len(random_recommended_books) < num_recommendations:
+                random_recommended_books.append(book)
 
-            if book.author in recomended_authors:
-                recomended_books.append(book)
+            if book.author in recommended_authors:
+                recommended_books.append(book)
                 continue
             
             for genre in list(book.genre):
-                if genre in recomended_genres:
-                    recomended_books.append(book)
+                if genre in recommended_genres:
+                    recommended_books.append(book)
                     continue
 
-        return recomended_books if len(recomended_books) > 0 else random_recomended_books
+        return recommended_books if len(recommended_books) > 0 else random_recommended_books
 
-    def save_recomended_books(self, recomended_books):
+    def save_recommended_books(self, recommended_books):
         return [
             Book.objects.get_or_create(pk=book.id)[0]
-            for book in recomended_books
+            for book in recommended_books
         ]
 
         
