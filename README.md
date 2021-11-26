@@ -1,11 +1,13 @@
 # Backend workshop microservices 
+
 ## 0-introducing_the_monolith
 
-This project is a fork of _Tutorial "Local Library" website written in Django_, 
+This project is a fork of [_Tutorial "Local Library" website written in Django_](https://github.com/mdn/django-locallibrary-tutorial/),
 used as an example of a typical monlith in Django.
 For more info about the project check its original [Readme](./README.original.md).
 
 ### How to run
+
 1. Install [docker](https://docs.docker.com/engine/install/ubuntu)
 2. Install [docker-compose](https://docs.docker.com/compose/install/)
 3. Run `make build`
