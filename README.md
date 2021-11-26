@@ -34,12 +34,15 @@ The MQTT service that we'll be using is [RabbitMQ](https://hub.docker.com/_/rabb
 3. Implement Mixins
    1. The producer should implement `dj_cqrs.mixins.MasterMixin`
    2. The replica should implement  `dj_cqrs.mixins.ReplicaMixin`
-4. Setup model `CQRS_ID` class variable to identify the events
-   1. `CQRS_ID` is an string that identifies the events inside of the MQTT service
+4. Setup model `CQRS_ID` class variable to identify the events in both models
+   1. `CQRS_ID` is an string that identifies the topic inside of the MQTT service
    2. `CQRS_ID` should be the same between both models
-   3. **catalog.models.Book** should also implement `CQRS_FIELDS` to avoid sending the image or genre fields, you will have to add also `id` to the array as it is the `PK`
+   3. `CQRS_FIELDS` identifies the model fields to be sent throught MQTT. It have to contain
+      the model `pk`
+   4. **catalog.models.Book** should also implement `CQRS_FIELDS` to avoid sending the image or genre fields, you will have to add also `id` to the array as it is the `PK`
 
       ```python
+      CQRS_ID = 'book'
       CQRS_FIELDS = (
          'id',
          'title',
