@@ -2,7 +2,7 @@ from django_grpc_framework import proto_serializers
 
 from rest_framework import serializers
 
-from recomendations.models import Book, BookInstance
+from recommendations.models import Book, BookInstance
 from common.pb2 import book_pb2
 
 class BookProtoSerializer(proto_serializers.ModelProtoSerializer):
@@ -14,7 +14,7 @@ class BookProtoSerializer(proto_serializers.ModelProtoSerializer):
         fields = ['id', 'title', 'isbn', 'summary', 'author', 'genre', 'language']
 
 
-class BookRecomendationProtoSerializer(proto_serializers.ModelProtoSerializer):
+class BookRecommendationProtoSerializer(proto_serializers.ModelProtoSerializer):
     class Meta:
         model = Book
         proto_class = book_pb2.Book

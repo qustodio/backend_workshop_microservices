@@ -4,7 +4,7 @@ import grpc
 from apiflask import APIBlueprint, output, doc
 from flask import current_app
 
-from common.pb2 import book_pb2_grpc, book_pb2, recommendations_pb2, recommendations_pb2_grpc
+from common.pb2 import book_pb2, book_pb2_grpc, recommendations_pb2, recommendations_pb2_grpc
 from serializers import RecommendationSchema
 from views.helpers import returns_json, GRPCException
 

@@ -37,11 +37,11 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='UserRecomendation',
+            name='UserRecommendation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('user', models.IntegerField()),
-                ('books', models.ManyToManyField(to='recomendations.Book')),
+                ('books', models.ManyToManyField(to='recommendations.Book')),
             ],
         ),
         migrations.CreateModel(
@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 ('due_back', models.DateField(blank=True, null=True)),
                 ('borrower', models.IntegerField(null=True)),
                 ('status', models.CharField(blank=True, choices=[('d', 'Maintenance'), ('o', 'On loan'), ('a', 'Available'), ('r', 'Reserved')], default='d', help_text='Book availability', max_length=1)),
-                ('book', models.ForeignKey(null=True, on_delete=django.db.models.deletion.RESTRICT, to='recomendations.book')),
+                ('book', models.ForeignKey(null=True, on_delete=django.db.models.deletion.RESTRICT, to='recommendations.book')),
             ],
             options={
                 'abstract': False,
@@ -63,6 +63,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='book',
             name='genre',
-            field=models.ManyToManyField(help_text='Select a genre for this book', to='recomendations.Genre'),
+            field=models.ManyToManyField(help_text='Select a genre for this book', to='recommendations.Genre'),
         ),
     ]
