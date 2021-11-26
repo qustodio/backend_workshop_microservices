@@ -1,3 +1,4 @@
+import json
 import os
 
 import grpc
@@ -19,9 +20,6 @@ GRPC_STUB = account_pb2_grpc.UserControllerStub(GRPC_CHANNEL)
 
 
 @bp.post('')
-@doc("Create an author")
-@input(AuthorSchema)
-@output(AuthorSchema)
 def post(data: dict):
     try:
         response = GRPC_STUB.Create(
@@ -37,21 +35,7 @@ def post(data: dict):
     return response
 
 
-@bp.get('')
-def get_list():
-    try:
-        response = GRPC_STUB.List(account_pb2.UserListRequest())
-    except grpc.RpcError as rpc_error:
-        current_app.logger.error(rpc_error.details())
-        raise GRPCException(rpc_error)
-    print(f'Going to: {ACCOUNTS_HOST}:{ACCOUNTS_PORT}', flush=True)
-    print([_ for _ in response], flush=True)
-    return [_ for _ in response]
-
-
 @bp.get('/<int:user_id>')
-@doc("Get an author")
-@output(AuthorSchema)
 def get(user_id: int):
     print(f'Going to: {ACCOUNTS_HOST}:{ACCOUNTS_PORT}', flush=True)
     try:
@@ -59,4 +43,5 @@ def get(user_id: int):
     except grpc.RpcError as rpc_error:
         current_app.logger.error(rpc_error.details())
         raise GRPCException(rpc_error)
+    del response['password']
     return response

@@ -1,0 +1,10 @@
+[
+  {
+    "model": "account.user",
+    "pk": 1,
+    "fields": {
+      "username": "workshop",
+      "password": "pyday"
+    }
+  }
+]
