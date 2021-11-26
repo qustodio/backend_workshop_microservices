@@ -32,8 +32,6 @@ services:
     volumes:
       - ./api_gateway:/opt/api_gateway
       - ./common:/usr/local/lib/python3.8/site-packages/common
-    ports:
-      - "80:5000"
 
   catalog:
     build:
