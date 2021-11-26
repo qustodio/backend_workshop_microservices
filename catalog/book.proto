@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package catalog;
+package book;
 
 import "google/protobuf/empty.proto";
 
@@ -15,10 +15,10 @@ service BookController {
 message Book {
     int32 id = 1;
     string title = 2;
-    string isbn = 3;
-    int32 author = 4;
-    repeated int32 genre = 5;
-    string summary = 6;
+    int32 author = 3;
+    string summary = 4;
+    string isbn = 5;
+    repeated int32 genre = 6;
     int32 language = 7;
     string image = 8;
 }

@@ -31,5 +31,5 @@ migrate:
 
 fixtures:
 	@echo "Loading fixtures..."
-	docker-compose exec -T catalog sh -c "python manage.py loaddata fixtures/*.json"
+	docker-compose exec -T catalog sh -c "python manage.py loaddata catalog/fixtures/*.json"
 
