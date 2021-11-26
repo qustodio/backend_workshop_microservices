@@ -4,10 +4,8 @@ services:
   nginx:
     image: "nginx:1.19.8"
     restart: always
-    networks:
-      - catalog
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./compose/nginx/nginx.conf:/etc/nginx/nginx.conf
 
@@ -17,6 +15,16 @@ services:
       - "15672:15672"
     networks:
       - catalog
+  
+  frontend:
+    build:
+      context: ./frontend
+    env_file:
+      - ./frontend/.env.example
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - "3000:80"
 
   api-gateway:
     build:
@@ -28,8 +36,6 @@ services:
         RECOMENDATOR_HOST: "recomendator-async"
         RECOMENDATOR_PORT: 50051
         FLASK_ENV: "development"
-    networks:
-      - catalog
     volumes:
       - ./api_gateway:/opt/api_gateway
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -39,14 +45,12 @@ services:
       context: ./catalog/
     restart: always
     env_file:
-      - compose.env
-    networks:
-      - catalog
+      - compose_catalog.env
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - db
+      - catalog-db
 
   catalog-admin:
     build:
@@ -54,32 +58,27 @@ services:
     command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
     restart: always
     env_file:
-      - compose.env
-    networks:
-      - catalog
+      - compose_catalog.env
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - db
+      - catalog-db
 
-  recomendator:
+  recommendator:
     build:
-      context: recomendator/
-      dockerfile: Dockerfile
+      context: ./recommendator/
     restart: always
     env_file:
-      - compose.env
-    networks:
-      - catalog
+      - compose_recommendator.env
     environment:
-      CATALOG_HOST: "catalog"
-      CATALOG_PORT: 50051
+        CATALOG_HOST: "catalog"
+        CATALOG_PORT: 50051
     volumes:
-      - ./recomendator:/opt/recomendator
+      - ./recommendator:/opt/recommendator
       - ./common:/usr/local/lib/python3.8/site-packages/common
     depends_on:
-      - recomendator_db
+      - recommendator-db
 
   recomendator-async:
     build:
@@ -110,21 +109,15 @@ services:
     networks:
       - catalog
 
-  db:
+  catalog-db:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose.env
-    networks:
-      - catalog
+      - compose_catalog.env
     
-  recomendator_db:
+  recommendator-db:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose.env
-    networks:
-      - catalog
+      - compose_recommendator.env
 
-networks:
-  catalog:

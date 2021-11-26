@@ -10,6 +10,8 @@
 2. Book - connects through GRPC with the catalog microservice
 3. Loan - connects through GRPC with the catalog microservice
 4. Recommendation - connects through GRPC with the recommendation microservice
+5. Language - connects through GRPC with the catalog microservice
+5. Genre - connects through GRPC with the catalog microservice
 
 ### Swagger-UI
 Visit _http://localhost/docs/swagger-ui_

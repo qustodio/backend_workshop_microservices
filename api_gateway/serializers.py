@@ -63,7 +63,7 @@ class RenewLoanSchema(Schema):
     status = fields.Str(dump_only=True)
 
 
-class RecomendationSchema(Schema):
+class RecommendationSchema(Schema):
     id = fields.Int()
     title = fields.Str()
     isbn = fields.Str()
@@ -71,3 +71,13 @@ class RecomendationSchema(Schema):
     author = fields.Int()
     language = fields.Int()
     genre = fields.List(fields.Int)
+
+
+class LanguageSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()
+
+
+class GenreSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()
