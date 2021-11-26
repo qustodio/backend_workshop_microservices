@@ -2,10 +2,10 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from common.pb2 import recomendations_pb2 as recomendations__pb2
+from common.pb2 import recommendations_pb2 as recommendations__pb2
 
 
-class RecomendationsControllerStub(object):
+class RecommendationsControllerStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,13 +15,13 @@ class RecomendationsControllerStub(object):
             channel: A grpc.Channel.
         """
         self.List = channel.unary_stream(
-                '/recomendator.RecomendationsController/List',
-                request_serializer=recomendations__pb2.RecomendationsRequest.SerializeToString,
-                response_deserializer=recomendations__pb2.Book.FromString,
+                '/recommendator.RecommendationsController/List',
+                request_serializer=recommendations__pb2.RecommendationsRequest.SerializeToString,
+                response_deserializer=recommendations__pb2.Book.FromString,
                 )
 
 
-class RecomendationsControllerServicer(object):
+class RecommendationsControllerServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def List(self, request, context):
@@ -31,21 +31,21 @@ class RecomendationsControllerServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_RecomendationsControllerServicer_to_server(servicer, server):
+def add_RecommendationsControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'List': grpc.unary_stream_rpc_method_handler(
                     servicer.List,
-                    request_deserializer=recomendations__pb2.RecomendationsRequest.FromString,
-                    response_serializer=recomendations__pb2.Book.SerializeToString,
+                    request_deserializer=recommendations__pb2.RecommendationsRequest.FromString,
+                    response_serializer=recommendations__pb2.Book.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'recomendator.RecomendationsController', rpc_method_handlers)
+            'recommendator.RecommendationsController', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class RecomendationsController(object):
+class RecommendationsController(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -59,8 +59,8 @@ class RecomendationsController(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/recomendator.RecomendationsController/List',
-            recomendations__pb2.RecomendationsRequest.SerializeToString,
-            recomendations__pb2.Book.FromString,
+        return grpc.experimental.unary_stream(request, target, '/recommendator.RecommendationsController/List',
+            recommendations__pb2.RecommendationsRequest.SerializeToString,
+            recommendations__pb2.Book.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

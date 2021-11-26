@@ -10,6 +10,6 @@ class LibraryUser(AbstractUser):
 class Book(models.Model):
     pass
 
-class UserRecomendation(models.Model):
+class UserRecommendation(models.Model):
     user = models.IntegerField()
     books = models.ManyToManyField(Book)
