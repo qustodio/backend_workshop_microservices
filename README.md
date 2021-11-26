@@ -1,5 +1,5 @@
 # Backend workshop microservices 
-## 0-monolith
+## 0-introducing_the_monolith
 
 This project is a fork of _Tutorial "Local Library" website written in Django_, 
 used as an example of a typical monlith in Django.
