@@ -38,7 +38,7 @@ services:
       context: ./catalog/
     restart: always
     env_file:
-      - compose.env
+      - compose_catalog.env
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -51,7 +51,7 @@ services:
     command: ["python", "manage.py", "runserver", "0.0.0.0:50051"]
     restart: always
     env_file:
-      - compose.env
+      - compose_catalog.env
     volumes:
       - ./catalog:/opt/catalog
       - ./common:/usr/local/lib/python3.8/site-packages/common
@@ -63,7 +63,7 @@ services:
       context: ./recommendator/
     restart: always
     env_file:
-      - compose.env
+      - compose_recomendator.env
     environment:
         CATALOG_HOST: "catalog"
         CATALOG_PORT: 50051
@@ -77,11 +77,11 @@ services:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose.env
+      - compose_catalog.env
     
   recomendator-db:
     image: "postgres:11"
     restart: always
     env_file:
-      - compose.env
+      - compose_recomendator.env
 
