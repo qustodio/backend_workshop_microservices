@@ -33,9 +33,6 @@ spec:
             {{- toYaml .Values.frontend.securityContext | nindent 12 }}
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
-          env:
-            - name: REACT_APP_API_BASE_URL
-              value: {{ .Values.frontend.baseUrl}}
           ports:
             - name: http
               containerPort: {{ .Values.frontend.port }}
