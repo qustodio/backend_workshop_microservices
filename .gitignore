@@ -96,3 +96,8 @@ ENV/
 
 # VSCode
 .vscode
+
+# Helm
+*/charts
+requirements.lock
+Chart.lock
