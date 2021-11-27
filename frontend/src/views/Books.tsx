@@ -34,7 +34,7 @@ const BookCard = ({book}: {book: any}) => {
           <CardMedia
             component="img"
             height="300"
-            image={'https://fakeimg.pl/400x600/?text=No%20Cover&font=bebas'}
+            image={book.image ? `data:image/png;base64, ${book.image}` : 'https://fakeimg.pl/400x600/?text=No%20Cover&font=bebas'}
             alt={book.title}
           />
           <CardContent>

@@ -76,7 +76,7 @@ const BookDetails = ({bookId}: {bookId: string|undefined}) => {
           </Grid>
           <Grid item xs={6}>
             <img
-              src={'https://fakeimg.pl/400x600/?text=No%20Cover&font=bebas'}
+              src={query.data.image ? `data:image/png;base64, ${query.data.image}` : 'https://fakeimg.pl/400x600/?text=No%20Cover&font=bebas'}
               alt={query.data.title}
               loading="lazy"
               height={500}
