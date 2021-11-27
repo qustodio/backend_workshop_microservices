@@ -1,0 +1,38 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "qbooks.fullname" . }}-virtual-service
+spec:
+  hosts:
+  - "qbooks.com"
+  http:
+  - match:
+    - uri:
+        prefix: "/api/"
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: {{ include "qbooks.fullname" . }}-api-gateway
+        port:
+          number: {{ .Values.apiGateway.service.port }}
+  - match:
+    - uri:
+        prefix: "/static/admin"
+    - uri:
+        prefix: "/admin"
+    route:
+    - destination:
+        host: {{ include "qbooks.fullname" . }}-admin
+        port:
+          number: {{ .Values.admin.service.port }}
+  - match:
+    - uri:
+        prefix: "/"
+    route:
+    - destination:
+        host: {{ include "qbooks.fullname" . }}-frontend
+        port:
+          number: {{ .Values.frontend.service.port }}
+  gateways:
+  - {{ include "qbooks.fullname" . }}-gateway
