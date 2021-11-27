@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "qbooks.fullname" . }}-recommendator
+  labels:
+    {{- include "qbooks.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.recommendator.autoscaling.enabled }}
+  replicas: {{ .Values.recommendator.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "recommendator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.recommendator.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "recommendator.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.recommendator.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "qbooks.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.recommendator.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.recommendator.securityContext | nindent 12 }}
+          image: "{{ .Values.recommendator.image.repository }}:{{ .Values.recommendator.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.recommendator.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args: ["python manage.py grpcrunserver 0.0.0.0:{{ .Values.recommendator.port}} --dev"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "qbooks.fullname" . }}-recommendator-db-config
+            - secretRef:
+                name: {{ include "qbooks.fullname" . }}-recommendator-db-secrets
+          env:
+            - name: CATALOG_HOST
+              value: "{{ include "qbooks.fullname" . }}-catalog"
+            - name: CATALOG_PORT
+              value: "{{ .Values.catalog.service.port }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.recommendator.port }}
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+          readinessProbe:
+            tcpSocket:
+              port: http
+          resources:
+            {{- toYaml .Values.recommendator.resources | nindent 12 }}
+      {{- with .Values.recommendator.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.recommendator.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.recommendator.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
