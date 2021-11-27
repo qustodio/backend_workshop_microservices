@@ -1,16 +1,19 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "catalog.fullname" . }}-migrations
+  name: {{ include "qbooks.fullname" . }}-migrations
 spec:
   template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
     spec:
       restartPolicy: "OnFailure"
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "catalog.serviceAccountName" . }}
+      serviceAccountName: {{ include "qbooks.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -23,9 +26,9 @@ spec:
           args: ["python manage.py migrate && python manage.py loaddata fixtures/*.json"]
           envFrom:
             - configMapRef:
-                name: {{ include "catalog.fullname" . }}-configs
+                name: {{ include "qbooks.fullname" . }}-configs
             - secretRef:
-                name: {{ include "catalog.fullname" . }}-secrets
+                name: {{ include "qbooks.fullname" . }}-secrets
           ports:
             - name: http
               containerPort: {{ .Values.catalog.port }}

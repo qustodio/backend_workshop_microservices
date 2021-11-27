@@ -178,7 +178,7 @@ To make our local images available to minikube, we first need to load some envir
 
 ```bash
 eval $(minikube docker-env)
-docker build -t catalog:latest .
+docker build -t catalog-monolith:latest .
 ```
 
 ### Install chart
