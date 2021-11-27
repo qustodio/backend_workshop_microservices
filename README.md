@@ -1,38 +1,221 @@
-# Django Local Library
+# Setting-up the cluster
+## What's about
 
-Tutorial "Local Library" website written in Django.
+Here we will setup a kubernetes cluster in our machine
 
-For detailed information about this project see the associated [MDN tutorial home page](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Tutorial_local_library_website).
+## Kubectl
 
-## Overview
+Kubectl is a cli to interact with kubernetes clusters
 
-This web application creates an online catalog for a small local library, where users can browse available books and manage their accounts.
+### Installation
 
-The main features that have currently been implemented are:
+https://kubernetes.io/docs/tasks/tools/#kubectl
 
-* There are models for books, book copies, genre, language and authors.
-* Users can view list and detail information for books and authors.
-* Admin users can create and manage models. The admin has been optimised (the basic registration is present in admin.py, but commented out).
-* Librarians can renew reserved books
+## Helm
 
-![Local Library Model](https://raw.githubusercontent.com/mdn/django-locallibrary-tutorial/master/catalog/static/images/local_library_model_uml.png)
+Helm is a package manager for kubernetes. It simplifies the installation of applications on kubernetes
+
+### Installation
+
+https://helm.sh/docs/intro/install/
+
+## Minikube
+
+Minikube is a local kubernetes that focuses on quickly set up a cluster to play around with.
+
+### Installation
+
+https://minikube.sigs.k8s.io/docs/start/
+
+### Running minikube
+
+```bash
+# Minikube
+minikube start
+
+# Minikube tunnel, needed to use istio's ingress
+minikube tunnel
+
+# (Optional) Dashboard
+minikube dashboard
+```
+
+### Install addons
+```bash
+minikube addons enable ingress
+```
 
 
-## Quick Start
+# Setting-up infrastructure
+## What's about
 
-To get this project up and running locally on your computer:
-1. Set up the [Python development environment](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/development_environment).
-   We recommend using a Python virtual environment.
-1. Assuming you have Python setup, run the following commands (if you're on Windows you may use `py` or `py -3` instead of `python` to start Python):
-   ```
-   pip3 install -r requirements.txt
-   python3 manage.py makemigrations
-   python3 manage.py migrate
-   python3 manage.py collectstatic
-   python3 manage.py test # Run the standard tests. These should all pass.
-   python3 manage.py createsuperuser # Create a superuser
-   python3 manage.py runserver
-   ```
-1. Open a browser to `http://127.0.0.1:8000/admin/` to open the admin site
-1. Create a few test objects of each type.
-1. Open tab to `http://127.0.0.1:8000` to see the main site, with your new objects.
+Here we will add some amazing monitoring utils that will help us
+to have observability within the cluster
+
+## Istio
+
+Istio is a service mesh for kubernetes. It allows us to simply observability, traffic management, security, and policies managent
+
+### Steps
+
+```bash
+# Add helm repository
+helm repo add istio https://istio-release.storage.googleapis.com/charts
+helm repo update
+
+# Install istio's base chart
+kubectl create namespace istio-system
+helm install istio-base istio/base -n istio-system
+
+# Install istio's control plane
+helm install istiod istio/istiod -n istio-system --wait
+
+# Install istio's ingress
+kubectl create namespace istio-ingress
+kubectl label namespace istio-ingress istio-injection=enabled
+helm install istio-ingress istio/gateway -n istio-ingress --wait
+```
+
+## Kube Prometheus stack
+
+The 'Kube prometheus stack' is...
+
+### Steps
+
+Add the helm repository
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+```
+
+We do create the namespace
+
+```bash
+kubectl create namespace prometheus-stack
+```
+
+Install the prometheus stack in its namespace
+```bash
+helm install prometheus-stack prometheus-community/kube-prometheus-stack --namespace prometheus-stack --values infra/kube-prometheus-stack/values.yml
+```
+
+## Loki
+
+### Steps
+
+Add the helm repository
+
+```bash
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+```
+
+We do create the namespace
+```bash
+kubectl create namespace loki-stack
+```
+
+Install the loki stack in its namespace
+```bash
+helm upgrade --install loki --namespace=loki-stack grafana/loki-stack --values infra/loki/values.yml
+```
+
+## Kiali
+
+Kiali is a management console for Istio.
+
+### Steps
+
+```bash
+# Add kiali helm repo
+helm repo add kiali https://kiali.org/helm-charts
+helm repo update
+
+# Install kiali chart
+helm install kiali-server kiali/kiali-server --namespace istio-system --values infra/kiali/values.yml
+```
+
+# Setting-up our application
+
+## What's about
+
+We will install our application on the cluster using Helm, and allow istio to inject its sidecars on our application's pods
+
+## Namespace
+
+### Create namespace
+
+Create the kubernetes' namespace
+
+```bash
+kubectl create namespace qbooks
+```
+
+### Labels
+Add istio's label to the namespace
+```bash
+kubectl label namespace qbooks istio-injection=enabled
+```
+This allows istio to inject a sidecard to our application's pods.
+The sidecard will handle the pod's connectivity and networking to integrate it to the service mesh in a seamless way
+
+## Helm chart
+
+Install helm chart.
+
+### Dependencies
+
+Our chart has a dependencies to other chart. This command downloads the needed charts to complete our app's installation
+```bash
+helm dependencies update ./chart
+```
+
+### Docker images
+
+Minikube uses it's own docker agent to manage its containers.
+To make our local images available to minikube, we first need to load some environment variables provided by minikube, and then build our images.
+
+```bash
+eval $(minikube docker-env)
+docker build -t catalog-monolith:latest .
+```
+
+### Install chart
+
+Values files allows us to customize and tune properties of our helm installation.
+We will install our application using the values file located in the chart's path.
+```bash
+helm install qbooks-app ./chart --values ./chart/values.yaml -n qbooks
+```
+
+# Accessing the cluster
+
+## What's about
+
+We will learn how to access our kubernetes applications.
+
+### Hosts file
+
+Add the following lines to `/etc/hosts`:
+```
+MINIKUBE_IP grafana.qbooks.com
+MINIKUBE_IP kiali.qbooks.com
+INGRESS_IP  qbooks.com
+```
+
+To get the ingress' IP, run:
+```bash
+kubectl get svc istio-ingress -n istio-ingress
+```
+
+To get minikube's IP run:
+```bash
+minikube ip
+```
+
+### Access services
+
+Access `grafana.qbooks.com` to reach grafana
+Access `qbooks.com` to reach qbooks application
+Access `kiali.qbooks.com/kiali` to reach kiali
