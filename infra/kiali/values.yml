@@ -75,6 +75,8 @@ external_services:
   istio:
     root_namespace: "istio-system"
   prometheus:
+    enabled: true
+    is_core: true
     url: "http://prometheus-stack-kube-prom-prometheus.prometheus-stack.svc.cluster.local:9090"
   istio:
     component_status:
