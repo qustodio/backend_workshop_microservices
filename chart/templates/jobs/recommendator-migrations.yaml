@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "qbooks.fullname" . }}-recommendator-migrations
+  annotations:
+    sidecar.istio.io/inject: "false"
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      restartPolicy: "OnFailure"
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "qbooks.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: recommendator
+          securityContext:
+            {{- toYaml .Values.recommendator.securityContext | nindent 12 }}
+          image: "{{ .Values.recommendator.image.repository }}:{{ .Values.recommendator.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.recommendator.image.pullPolicy }}
+          command: ["/bin/sh","-c"]
+          args: ["python manage.py migrate"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "qbooks.fullname" . }}-recommendator-db-config
+            - secretRef:
+                name: {{ include "qbooks.fullname" . }}-recommendator-db-secrets
+          ports:
+            - name: http
+              containerPort: {{ .Values.recommendator.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.recommendator.resources | nindent 12 }}
+      {{- with .Values.recommendator.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.recommendator.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.recommendator.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
