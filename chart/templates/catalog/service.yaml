@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "qbooks.fullname" . }}-catalog
+  labels:
+    {{- include "qbooks.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.catalog.service.type }}
+  ports:
+    - port: {{ .Values.catalog.service.port }}
+      targetPort: {{ .Values.catalog.port }}
+      protocol: TCP
+      name: grpc
+  selector:
+    {{- include "catalog.selectorLabels" . | nindent 4 }}
